@@ -1,7 +1,7 @@
 
 import Blade from "../modules/blade.ts";
 import Wall, {randomWallHeight} from "../modules/wall.ts";
-import { CANVAS_HEIGHT, WALL_Y_GAP, GAME_MOVEMENT, BALDE_RANGE } from "../utils/constants.ts";
+import { CANVAS_HEIGHT, WALL_Y_GAP, GAME_MOVEMENT, BLADE_RANGE } from "../utils/constants.ts";
 import {calcx} from "../utils/generatePosition.ts";
 import random, { prob50 } from "../utils/random.ts";
 
@@ -9,12 +9,15 @@ import random, { prob50 } from "../utils/random.ts";
 // generate num number of walls
 export function generateWalls(num: number) {
 	const walls: Wall[] = [];
+	// const availableXPositions = generateXPositions(num);
+	// const availableYpositions = generateYPositions(num);
 	for (let i = 0; i < num; ++i) {
 		const x = calcx();
 		const wall = new Wall(x, 0, "normal", "./images/normal-wall.png");
-        const wallHeight = randomWallHeight(); 
+		const wallHeight = randomWallHeight();
 		const y = CANVAS_HEIGHT - wallHeight - WALL_Y_GAP * (i + 1);
-        wall.y = y;
+		wall.h = wallHeight; 
+		wall.y = y;
         walls.push(wall);
 	} 
 	return walls;
@@ -29,7 +32,7 @@ export function generateBlades(num: number){
     for(let i=0; i < num; ++i){
         // get start and end range for blade movement
         const startpos = calcx();
-        const endpos = startpos + BALDE_RANGE; 
+        const endpos = startpos + BLADE_RANGE; 
 
         //generate a random x-position within the start and end range
         const xpos = startpos + random(50);

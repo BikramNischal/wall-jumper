@@ -1,4 +1,4 @@
-import { CANVAS_WIDTH,WALL_X_GAP } from "./constants";
+import { CANVAS_WIDTH,WALL_X_GAP} from "./constants";
 import random from "./random.ts";
 
 
@@ -23,3 +23,4 @@ export function calcx() {
 
 	return adjustX;
 }
+
