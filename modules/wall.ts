@@ -45,6 +45,13 @@ export default class Wall {
 	draw() {
 		if (this.loaded)
 			ctx.drawImage(this.img, this.x, this.y, this.w, this.h);
+
+		// image outline  FOR TESTING ONLY
+		ctx.beginPath();
+		ctx.fillStyle = "red";
+		ctx.strokeStyle = "red";
+		ctx.rect(this.x, this.y, this.w, this.h);
+		ctx.stroke();
 	}
 
 	moveInY() {
