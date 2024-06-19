@@ -6,7 +6,6 @@ export default class Obstacle {
 	y: number;
 	dx: number;
 	dy: number;
-	direction: Direction;
 	w: number;
 	h: number;
 	img: HTMLImageElement;
@@ -15,9 +14,7 @@ export default class Obstacle {
 
 	constructor(
 		posx: number,
-		posy: number,
-		direction: Direction,
-		imgsrc: string
+		posy: number
 	) {
 		this.x = posx;
 		this.y = posy;
@@ -26,21 +23,11 @@ export default class Obstacle {
 		this.w = 64;
 		this.h = 64;
 		this.gameDy = GAME_MOVEMENT;
-		this.direction = direction;
 
 		this.loaded = false;
 		this.img = new Image();
-		this.img.src = imgsrc;
-		this.img.onload = () => {
-			this.loaded = true;
-			this.draw();
-		};
 	}
 
-	draw() {
-		if (this.loaded)
-			ctx.drawImage(this.img, this.x, this.y, this.w, this.y);
-	}
 
 	//update the obstacle position according to the game flow
 	update() {
@@ -51,6 +38,7 @@ export default class Obstacle {
 export class MovingObstacle extends Obstacle {
 	startPos: number;
 	endPos: number;
+	direction: Direction;
 
 	constructor(
 		posx: number,
@@ -58,11 +46,23 @@ export class MovingObstacle extends Obstacle {
 		direction: Direction,
 		imgsrc: string,
 		start: number,
-		end: number
+		end: number,
 	) {
-		super(posx, posy, direction, imgsrc);
+		super(posx, posy);
 		this.startPos = start;
 		this.endPos = end;
+		this.direction = direction;
+
+		this.img.src = imgsrc;
+		this.img.onload = () => {
+			this.loaded = true;
+			this.draw();
+		};
+	}
+	
+	draw() {
+		if (this.loaded)
+			ctx.drawImage(this.img, this.x, this.y, this.w, this.y);
 	}
 
 	//move the obstacle in the mentioned direction

@@ -18,6 +18,7 @@ const WALL_Y_GAP = 50;
 const BLADE_RANGE = 50;
 
 export type Direction = "horizontal" | "vertical";
+export type obstacleFace = "right" | "left"
 
 
 const INITX = CANVAS_WIDTH / 3;

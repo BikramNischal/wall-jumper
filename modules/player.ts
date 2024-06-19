@@ -1,3 +1,4 @@
+import { CANVAS_HEIGHT } from "../utils/constants";
 import { ctx } from "./canvas";
 import Obstacle from "./obstacle";
 import Wall from "./wall";
@@ -32,11 +33,11 @@ export default class Player {
 
 		// movement agents and variables
 		this.xDirection = 1;
-		this.dx = 7;
-		this.dy = -12;
 		this.horizontalDelay = 0.1;
 		this.gravity = 0.5;
-		this.jumpHeight = -10;
+		this.jumpHeight = -8;
+		this.dx = 7;
+		this.dy = this.jumpHeight;
 		this.isJumping = false;
 		this.jumpCount = 2;
 
@@ -61,11 +62,11 @@ export default class Player {
 			ctx.drawImage(this.img, this.x, this.y, this.w, this.h);
 
 		// image outline FOR TESTING ONLY
-		ctx.beginPath();
-		ctx.fillStyle = "red";
-		ctx.strokeStyle = "red";
-		ctx.rect(this.x, this.y, this.w, this.h);
-		ctx.stroke();
+		// ctx.beginPath();
+		// ctx.fillStyle = "red";
+		// ctx.strokeStyle = "red";
+		// ctx.rect(this.x, this.y, this.w, this.h);
+		// ctx.stroke();
 	}
 
 	drawJumpSprite() {
@@ -79,7 +80,7 @@ export default class Player {
 				this.x,
 				this.y,
 				48,
-				48	
+				48
 			);
 
 			this.currentFrame = (this.currentFrame + 1) % this.totalFrame;
@@ -89,7 +90,7 @@ export default class Player {
 	resetJump() {
 		if (this.jumpCount === 1) this.xDirection *= -1;
 		this.dx = 7 * this.xDirection;
-		this.dy = -12;
+		this.dy = this.jumpHeight;
 	}
 
 	changeJumpingImage() {
@@ -112,12 +113,22 @@ export default class Player {
 			this.dx > 0
 				? this.dx - this.horizontalDelay
 				: this.dx + this.horizontalDelay;
+
 		this.x += this.dx;
-		this.y += this.dy;
+
+		if (this.dy > 0) this.y += this.dy;
+		else {
+			if (this.y > CANVAS_HEIGHT / 4) {
+				this.y += this.dy;
+			} else {
+				this.y = CANVAS_HEIGHT / 4;
+			}
+		}
+		// this.y = CANVAS_HEIGHT / 2;
 
 		// Limit falling speed
-		if (this.dy > 10) {
-			this.dy = 10;
+		if (this.dy > -this.jumpHeight) {
+			this.dy = -this.jumpHeight;
 		}
 	}
 
@@ -130,17 +141,17 @@ export default class Player {
 		);
 	}
 
-	collision(object: Wall | Obstacle) {
-		if (this.isColliding(object)) {
+	collisionWall(wall: Wall) {
+		if (this.isColliding(wall)) {
 			this.jumpCount = 2;
 			this.isJumping = false;
 		}
 
 		// Adjust this position based on collision side
-		const dx = this.x + this.w / 2 - (object.x + object.w / 2);
-		const dy = this.y + this.h / 2 - (object.y + object.h / 2);
-		const width = (this.w + object.w) / 2;
-		const height = (this.h + object.h) / 2;
+		const dx = this.x + this.w / 2 - (wall.x + wall.w / 2);
+		const dy = this.y + this.h / 2 - (wall.y + wall.h / 2);
+		const width = (this.w + wall.w) / 2;
+		const height = (this.h + wall.h) / 2;
 		const crossWidth = width * dy;
 		const crossHeight = height * dx;
 
@@ -148,24 +159,26 @@ export default class Player {
 			if (crossWidth > crossHeight) {
 				if (crossWidth > -crossHeight) {
 					// Collision on the bottom side
-					this.y = object.y + object.h - this.h;
-					this.x = object.x - this.w;
+					this.y = wall.y + wall.h - this.h/2;
+					if (this.x < wall.x) this.x = wall.x - this.w;
+					else this.x = wall.x + wall.w;
 				} else {
 					// Collision on the left side
-					this.x = object.x - this.w;
+					this.x = wall.x - this.w;
 					this.xDirection = -1;
 					this.img.src = "./images/grab-right.png";
 				}
 			} else {
 				if (crossWidth > -crossHeight) {
 					// Collision on the right side
-					this.x = object.x + object.w;
+					this.x = wall.x + wall.w;
 					this.xDirection = 1;
 					this.img.src = "./images/grab-left.png";
 				} else {
 					// Collision on the top side
-					this.y = object.y;
-					this.x = object.x - this.w + 1;
+					this.y = wall.y;
+					if (this.x < wall.x) this.x = wall.x - this.w;
+					else this.x = wall.x + wall.w;
 				}
 			}
 		}

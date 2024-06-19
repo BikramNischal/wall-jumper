@@ -1,9 +1,11 @@
 
 import Blade from "../modules/blade.ts";
+import Player from "../modules/player.ts";
 import Wall, {randomWallHeight} from "../modules/wall.ts";
-import { CANVAS_HEIGHT, WALL_Y_GAP, GAME_MOVEMENT, BLADE_RANGE, INITX, INITY } from "../utils/constants.ts";
+import { CANVAS_HEIGHT, WALL_Y_GAP, BLADE_RANGE, INITX, INITY} from "../utils/constants.ts";
 import {calcx} from "../utils/generatePosition.ts";
 import random, { prob50 } from "../utils/random.ts";
+// import Spike from "../modules/spike.ts";
 
 
 //generate a wall
@@ -21,6 +23,7 @@ export function generateWall(prevWall : Wall | null){
 export function generateWalls(num: number) {
 	const walls: Wall[] = [];
 	const startWall = new Wall(INITX, INITY, "normal", "./images/normal-wall.png");
+	startWall.spike = null;
 	walls.push(startWall);
 	for (let i = 0; i < num; ++i) {
 		let wall = walls.length ? generateWall(walls[walls.length-1]) : generateWall(null);
@@ -58,7 +61,7 @@ export function generateBlades(num: number){
 
 
 // update wall list
-export function updateWalls(walls: Wall[]){
+export function updateWalls(walls: Wall[], player: Player){
 	// condition checks if the gap between top most wall and the starting-y of canvas
 	// is greater than wall gap in y-axis
 	// if true then new wall is created and add to the list
@@ -77,7 +80,13 @@ export function updateWalls(walls: Wall[]){
 	}
 
 	walls.forEach((wall) => {
-		wall.y += GAME_MOVEMENT;
+		// update wall position only if it moves down from current position
+		if((wall.y - player.dy) > wall.y){
+			wall.y -= player.dy * 2;
+			if(wall.spike)
+				wall.spike.y -= player.dy*2;
+		}
+
 		if (wall.y > CANVAS_HEIGHT) {
 			//remove the wall(i.e first wall in the list) that goes out of canvas
 			walls.shift();
@@ -88,16 +97,21 @@ export function updateWalls(walls: Wall[]){
 			//but new first is not displayed yet so to make the new wall appear again
 			// re-draw the new first wall i.e wall at near bottom of canvas
 			if (walls[0]) {
-				walls[0].y += 10;
+				if((walls[0].y - player.dy) > walls[0].y){
+					walls[0].y -= player.dy * 2;
+					if(wall.spike)
+						wall.spike.w -= player.dy *2;
+				}
+
 				walls[0].draw();
 			}
 		}
 	});
 }
 
-export function updateBlades(blades: Blade[]){
+export function updateBlades(blades: Blade[], player:Player){
     blades.forEach((blade) => {
-        blade.y += GAME_MOVEMENT;
+        blade.y -= player.dy;
         if(blade.y > CANVAS_HEIGHT) blades.shift();
     }); 
 

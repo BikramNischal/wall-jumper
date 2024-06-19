@@ -6,8 +6,9 @@ import {
 	GAME_MOVEMENT,
 } from "../utils/constants.ts";
 
-import random from "../utils/random.ts";
+import random, {probabilty } from "../utils/random.ts";
 import { calcx } from "../utils/generatePosition.ts";
+import Spike, { generateSpike } from "./spike.ts";
 
 export default class Wall {
 	x: number;
@@ -19,6 +20,7 @@ export default class Wall {
 	img: HTMLImageElement;
 	type: string;
 	loaded: boolean;
+	spike: Spike | null;
 
 	constructor(posx: number, posy: number, type: string, imgsrc: string) {
 		this.x = posx;
@@ -29,6 +31,7 @@ export default class Wall {
 		this.h = WALL_HEIGHT_SMALL;
 		this.type = type;
 		this.loaded = false;
+		this.spike = this.placeSpike();
 
 		this.img = new Image();
 		this.img.src = imgsrc;
@@ -47,19 +50,46 @@ export default class Wall {
 			ctx.drawImage(this.img, this.x, this.y, this.w, this.h);
 
 		// image outline  FOR TESTING ONLY
-		ctx.beginPath();
-		ctx.fillStyle = "red";
-		ctx.strokeStyle = "red";
-		ctx.rect(this.x, this.y, this.w, this.h);
-		ctx.stroke();
+		// ctx.beginPath();
+		// ctx.fillStyle = "red";
+		// ctx.strokeStyle = "red";
+		// ctx.rect(this.x, this.y, this.w, this.h);
+		// ctx.stroke();
 	}
 
 	moveInY() {
 		this.y += this.dy;
+		if(this.spike)
+			this.spike.y += this.dy;
 	}
 
 	moveInX() {
 		this.x += this.dx;
+	}
+
+	placeSpike() {
+		const hasSpike = probabilty(100);
+		if (hasSpike) {
+			const spike = generateSpike();
+			if (spike.face === "left") {
+				spike.x = this.x - spike.w;
+			} else {
+				spike.x = this.x + this.w;
+			}
+
+			spike.y = this.y + this.h / 2;
+			
+			// image outline  FOR TESTING ONLY
+			ctx.beginPath();
+			ctx.fillStyle = "red";
+			ctx.strokeStyle = "red";
+			ctx.rect(this.x, this.y, this.w, this.h);
+			ctx.stroke();
+
+			return spike;
+		} else {
+			return null;
+		}
 	}
 }
 

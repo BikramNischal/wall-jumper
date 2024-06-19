@@ -5,7 +5,7 @@ import {
 	WALL_HEIGHT_SMALL,
 	INITX,
 	INITY,
-	WALL_WIDTH
+	WALL_WIDTH,
 } from "../utils/constants.ts";
 import {
 	generateWalls,
@@ -40,15 +40,21 @@ const gameState = {
 function Game() {
 	ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-	if(player.jumpCount)
-		player.draw();
-	else 
-		player.drawJumpSprite();
+	
+	if (player.jumpCount) player.draw();
+	else player.drawJumpSprite();
 
-	if (player.isJumping) player.jump();
+	if (player.isJumping) {
+		player.jump();
+		updateWalls(gameState.walls,player);
+		updateBlades(gameState.blades,player);
+	}
 	gameState.walls.forEach((wall) => {
 		wall.draw();
-		player.collision(wall);
+		if(wall.spike){
+			wall.spike.draw();
+		}
+		player.collisionWall(wall);
 	});
 	// gameState.blades.forEach((blade) => {
 	// 	blade.draw();
@@ -60,8 +66,6 @@ function Game() {
 
 gameWindow.addEventListener("click", () => {
 	ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-	updateWalls(gameState.walls);
-	updateBlades(gameState.blades);
 
 	if (player.jumpCount > 0) {
 		player.isJumping = true;
@@ -69,5 +73,11 @@ gameWindow.addEventListener("click", () => {
 		--player.jumpCount;
 	}
 });
+
+document.addEventListener("keydown", (event)=>{
+	if(event.key === "ArrowUp"){
+		updateWalls(gameState.walls, player);
+	}
+})
 
 Game();
