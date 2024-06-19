@@ -18,6 +18,12 @@ export default class Player {
 	jumpCount: number;
 	xDirection: number;
 
+	//for jumping animation
+	spriteWidth: number;
+	spriteHeight: number;
+	currentFrame: number;
+	totalFrame: number;
+
 	constructor(posx: number, posy: number, imgsrc: string) {
 		this.x = posx;
 		this.y = posy;
@@ -26,7 +32,7 @@ export default class Player {
 
 		// movement agents and variables
 		this.xDirection = 1;
-		this.dx = 5;
+		this.dx = 7;
 		this.dy = -12;
 		this.horizontalDelay = 0.1;
 		this.gravity = 0.5;
@@ -42,6 +48,12 @@ export default class Player {
 			this.loaded = true;
 			this.draw();
 		};
+
+		// for airjump sprites
+		this.spriteHeight = 67;
+		this.spriteWidth = 64;
+		this.currentFrame = 0;
+		this.totalFrame = 8;
 	}
 
 	draw() {
@@ -56,22 +68,40 @@ export default class Player {
 		ctx.stroke();
 	}
 
+	drawJumpSprite() {
+		if (this.loaded) {
+			ctx.drawImage(
+				this.img,
+				this.currentFrame * this.spriteWidth,
+				0,
+				this.spriteWidth,
+				this.spriteHeight,
+				this.x,
+				this.y,
+				48,
+				48	
+			);
+
+			this.currentFrame = (this.currentFrame + 1) % this.totalFrame;
+		}
+	}
+
 	resetJump() {
 		if (this.jumpCount === 1) this.xDirection *= -1;
-		this.dx = 5 * this.xDirection;
+		this.dx = 7 * this.xDirection;
 		this.dy = -12;
 	}
 
 	changeJumpingImage() {
 		//jumping image
-		if (this.dx > 0 && this.jumpCount === 2) {
+		if (this.dx > 0 && this.jumpCount === 1) {
 			this.img.src = "./images/jump-right.png";
-		} else if (this.dx < 0 && this.jumpCount === 2) {
+		} else if (this.dx < 0 && this.jumpCount === 1) {
 			this.img.src = "./images/jump-left.png";
-		} else if (this.dx > 0 && this.jumpCount === 1) {
-			this.img.src = "./images/mid-jump-right.png";
+		} else if (this.dx > 0 && this.jumpCount === 0) {
+			this.img.src = "./images/mid-jump-right-sprite.png";
 		} else {
-			this.img.src = "./images/mid-jump-left.png";
+			this.img.src = "./images/mid-jump-left-sprite.png";
 		}
 	}
 
@@ -118,8 +148,8 @@ export default class Player {
 			if (crossWidth > crossHeight) {
 				if (crossWidth > -crossHeight) {
 					// Collision on the bottom side
-					this.y = object.y + object.h;
-					this.x -= this.w;
+					this.y = object.y + object.h - this.h;
+					this.x = object.x - this.w;
 				} else {
 					// Collision on the left side
 					this.x = object.x - this.w;
@@ -131,11 +161,11 @@ export default class Player {
 					// Collision on the right side
 					this.x = object.x + object.w;
 					this.xDirection = 1;
-					this.img.src = "./images/grab-left.png"
+					this.img.src = "./images/grab-left.png";
 				} else {
 					// Collision on the top side
-					this.y = object.y - this.h;
-					this.x += this.w;
+					this.y = object.y;
+					this.x = object.x - this.w + 1;
 				}
 			}
 		}

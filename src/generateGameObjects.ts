@@ -1,23 +1,29 @@
 
 import Blade from "../modules/blade.ts";
 import Wall, {randomWallHeight} from "../modules/wall.ts";
-import { CANVAS_HEIGHT, WALL_Y_GAP, GAME_MOVEMENT, BLADE_RANGE } from "../utils/constants.ts";
+import { CANVAS_HEIGHT, WALL_Y_GAP, GAME_MOVEMENT, BLADE_RANGE, INITX, INITY } from "../utils/constants.ts";
 import {calcx} from "../utils/generatePosition.ts";
 import random, { prob50 } from "../utils/random.ts";
+
+
+//generate a wall
+export function generateWall(prevWall : Wall | null){
+	const x = calcx();
+	const wallHeight = randomWallHeight();
+	const y = (prevWall) ? prevWall.y - wallHeight - WALL_Y_GAP: CANVAS_HEIGHT - wallHeight -WALL_Y_GAP; 
+	const wall = new Wall(x,y,"normal", "./images/normal-wall.png");
+	wall.h = wallHeight;
+	return wall;
+}
 
 
 // generate num number of walls
 export function generateWalls(num: number) {
 	const walls: Wall[] = [];
-	// const availableXPositions = generateXPositions(num);
-	// const availableYpositions = generateYPositions(num);
+	const startWall = new Wall(INITX, INITY, "normal", "./images/normal-wall.png");
+	walls.push(startWall);
 	for (let i = 0; i < num; ++i) {
-		const x = calcx();
-		const wall = new Wall(x, 0, "normal", "./images/normal-wall.png");
-		const wallHeight = randomWallHeight();
-		const y = CANVAS_HEIGHT - wallHeight - WALL_Y_GAP * (i + 1);
-		wall.h = wallHeight; 
-		wall.y = y;
+		let wall = walls.length ? generateWall(walls[walls.length-1]) : generateWall(null);
         walls.push(wall);
 	} 
 	return walls;

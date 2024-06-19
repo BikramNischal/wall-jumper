@@ -10,14 +10,18 @@ const WALL_HEIGHT_SMALL: number = 72;
 const WALL_HEIGHT_MEDIUM: number = 160;
 const WALL_HEIGHT_BIG: number = 256;
 // Wall separation in x-axis
-const WALL_X_GAP = 200;
+const WALL_X_GAP = 150;
 //wall separation in y-axis
-const WALL_Y_GAP = 150;
+const WALL_Y_GAP = 50;
 
 //blade movement range
 const BLADE_RANGE = 50;
 
 export type Direction = "horizontal" | "vertical";
+
+
+const INITX = CANVAS_WIDTH / 3;
+const INITY = CANVAS_HEIGHT - 2 * WALL_HEIGHT_SMALL;
 
 export {
 	CANVAS_HEIGHT,
@@ -30,4 +34,6 @@ export {
 	WALL_Y_GAP,
 	GAME_MOVEMENT,
 	BLADE_RANGE,
+	INITX,
+	INITY
 };
