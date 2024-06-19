@@ -5,10 +5,16 @@ export default function random(max: number){
     return Math.floor(Math.random() * max);
 }
 
-// return true or false accodring to the probability
-export function probabilty(max:number){
-    const randomConst = random(max);
-    if(randomConst > max/2 && randomConst%2 === 0) return true;
+
+// return a random number between a range 
+export function randomRange(min:number, max:number){
+    return Math.floor(Math.random() * (max-min) + min);
+}
+
+// return true or false accodring to the 25% probability
+export function prob25(){
+    const randomConst = random(100);
+    if(randomConst > 100/2 && randomConst%2 === 0) return true;
     return false;
 }
 

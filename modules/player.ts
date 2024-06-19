@@ -1,7 +1,8 @@
-import { CANVAS_HEIGHT } from "../utils/constants";
+import { GAME_MOVEMENT, PLAYERDX, PLAYERDY } from "../utils/constants";
 import { ctx } from "./canvas";
 import Obstacle from "./obstacle";
 import Wall from "./wall";
+import { normalCollision, rubberCollision } from "../utils/wallcollision.ts";
 
 export default class Player {
 	x: number;
@@ -14,7 +15,6 @@ export default class Player {
 	loaded: boolean;
 	horizontalDelay: number;
 	gravity: number;
-	jumpHeight: number;
 	isJumping: boolean;
 	jumpCount: number;
 	xDirection: number;
@@ -35,9 +35,8 @@ export default class Player {
 		this.xDirection = 1;
 		this.horizontalDelay = 0.1;
 		this.gravity = 0.5;
-		this.jumpHeight = -8;
-		this.dx = 7;
-		this.dy = this.jumpHeight;
+		this.dx = PLAYERDX;
+		this.dy = PLAYERDY;
 		this.isJumping = false;
 		this.jumpCount = 2;
 
@@ -89,12 +88,12 @@ export default class Player {
 
 	resetJump() {
 		if (this.jumpCount === 1) this.xDirection *= -1;
-		this.dx = 7 * this.xDirection;
-		this.dy = this.jumpHeight;
+		this.dx = PLAYERDX * this.xDirection;
+		this.dy = PLAYERDY;
 	}
 
+	// change player images according to jump status
 	changeJumpingImage() {
-		//jumping image
 		if (this.dx > 0 && this.jumpCount === 1) {
 			this.img.src = "./images/jump-right.png";
 		} else if (this.dx < 0 && this.jumpCount === 1) {
@@ -118,18 +117,18 @@ export default class Player {
 
 		if (this.dy > 0) this.y += this.dy;
 		else {
-			if (this.y > CANVAS_HEIGHT / 4) {
+			if (this.y > 0) {
 				this.y += this.dy;
 			} else {
-				this.y = CANVAS_HEIGHT / 4;
+				this.y = 0;
 			}
 		}
-		// this.y = CANVAS_HEIGHT / 2;
 
 		// Limit falling speed
-		if (this.dy > -this.jumpHeight) {
-			this.dy = -this.jumpHeight;
+		if (this.dy > -PLAYERDY) {
+			this.dy = -PLAYERDY;
 		}
+
 	}
 
 	isColliding(object: Wall | Obstacle) {
@@ -145,42 +144,19 @@ export default class Player {
 		if (this.isColliding(wall)) {
 			this.jumpCount = 2;
 			this.isJumping = false;
+
+			if(wall.type === 2) this.isJumping = true;
 		}
 
-		// Adjust this position based on collision side
-		const dx = this.x + this.w / 2 - (wall.x + wall.w / 2);
-		const dy = this.y + this.h / 2 - (wall.y + wall.h / 2);
-		const width = (this.w + wall.w) / 2;
-		const height = (this.h + wall.h) / 2;
-		const crossWidth = width * dy;
-		const crossHeight = height * dx;
+		normalCollision(this, wall);
 
-		if (Math.abs(dx) <= width && Math.abs(dy) <= height) {
-			if (crossWidth > crossHeight) {
-				if (crossWidth > -crossHeight) {
-					// Collision on the bottom side
-					this.y = wall.y + wall.h - this.h/2;
-					if (this.x < wall.x) this.x = wall.x - this.w;
-					else this.x = wall.x + wall.w;
-				} else {
-					// Collision on the left side
-					this.x = wall.x - this.w;
-					this.xDirection = -1;
-					this.img.src = "./images/grab-right.png";
-				}
-			} else {
-				if (crossWidth > -crossHeight) {
-					// Collision on the right side
-					this.x = wall.x + wall.w;
-					this.xDirection = 1;
-					this.img.src = "./images/grab-left.png";
-				} else {
-					// Collision on the top side
-					this.y = wall.y;
-					if (this.x < wall.x) this.x = wall.x - this.w;
-					else this.x = wall.x + wall.w;
-				}
-			}
-		}
+	
+
+		
+	}
+
+	// move player downwards with game speed
+	moveInY() {
+		this.y += GAME_MOVEMENT;
 	}
 }

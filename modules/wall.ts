@@ -4,11 +4,20 @@ import {
 	WALL_HEIGHT_MEDIUM,
 	WALL_HEIGHT_SMALL,
 	GAME_MOVEMENT,
+	MAIN_WALL_HEIGHT,
+	MAIN_WALL_WIDTH,
 } from "../utils/constants.ts";
 
-import random, {probabilty } from "../utils/random.ts";
-import { calcx } from "../utils/generatePosition.ts";
+import random, {prob25 } from "../utils/random.ts";
 import Spike, { generateSpike } from "./spike.ts";
+
+/*
+Wall types 
+0: Main Wall (infinite wall on the left)
+1: normal wall
+2: bouncing wall/ rubber wall
+3: freezing wall
+*/
 
 export default class Wall {
 	x: number;
@@ -18,11 +27,11 @@ export default class Wall {
 	w: number;
 	h: number;
 	img: HTMLImageElement;
-	type: string;
+	type: number;
 	loaded: boolean;
 	spike: Spike | null;
 
-	constructor(posx: number, posy: number, type: string, imgsrc: string) {
+	constructor(posx: number, posy: number, type: number, imgsrc: string) {
 		this.x = posx;
 		this.y = posy;
 		this.dx = 0;
@@ -56,36 +65,33 @@ export default class Wall {
 		// ctx.rect(this.x, this.y, this.w, this.h);
 		// ctx.stroke();
 	}
-
-	moveInY() {
-		this.y += this.dy;
-		if(this.spike)
-			this.spike.y += this.dy;
+	
+	setMainWall(){
+		this.w = MAIN_WALL_WIDTH;
+		this.h = MAIN_WALL_HEIGHT;
 	}
 
+	moveInY() {
+		this.y += GAME_MOVEMENT;
+		if(this.spike)
+			this.spike.y += GAME_MOVEMENT;
+	}
+
+	// move walls downward with game movement
 	moveInX() {
 		this.x += this.dx;
 	}
 
 	placeSpike() {
-		const hasSpike = probabilty(100);
-		if (hasSpike) {
+		const hasSpike = prob25();
+		if (hasSpike && this.type < 2 ) {
 			const spike = generateSpike();
 			if (spike.face === "left") {
 				spike.x = this.x - spike.w;
 			} else {
 				spike.x = this.x + this.w;
 			}
-
-			spike.y = this.y + this.h / 2;
-			
-			// image outline  FOR TESTING ONLY
-			ctx.beginPath();
-			ctx.fillStyle = "red";
-			ctx.strokeStyle = "red";
-			ctx.rect(this.x, this.y, this.w, this.h);
-			ctx.stroke();
-
+			spike.y = this.y + this.h / 2;	
 			return spike;
 		} else {
 			return null;
@@ -106,4 +112,14 @@ function randomWallHeight() {
 	}
 }
 
-export { calcx, randomWallHeight };
+function randomWallType(){
+	const bounceWallProb = prob25()	;
+	if(bounceWallProb){
+		return 2;
+	} else {
+		return 1;
+	}
+
+}
+
+export {randomWallHeight, randomWallType};

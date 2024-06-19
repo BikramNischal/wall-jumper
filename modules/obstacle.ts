@@ -10,7 +10,6 @@ export default class Obstacle {
 	h: number;
 	img: HTMLImageElement;
 	loaded: boolean;
-	gameDy: number;
 
 	constructor(
 		posx: number,
@@ -22,7 +21,6 @@ export default class Obstacle {
 		this.dy = 10;
 		this.w = 64;
 		this.h = 64;
-		this.gameDy = GAME_MOVEMENT;
 
 		this.loaded = false;
 		this.img = new Image();
@@ -30,8 +28,8 @@ export default class Obstacle {
 
 
 	//update the obstacle position according to the game flow
-	update() {
-		this.y += this.gameDy;
+	moveInY() {
+		this.y += GAME_MOVEMENT;
 	}
 }
 

@@ -1,5 +1,5 @@
 import { MovingObstacle } from "./obstacle";
-import { Direction } from "../utils/constants";
+import { Direction} from "../utils/constants";
 import { ctx } from "./canvas";
 
 export default class Blade extends MovingObstacle {

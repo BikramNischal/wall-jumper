@@ -1,19 +1,23 @@
 
 import Blade from "../modules/blade.ts";
-import Player from "../modules/player.ts";
-import Wall, {randomWallHeight} from "../modules/wall.ts";
-import { CANVAS_HEIGHT, WALL_Y_GAP, BLADE_RANGE, INITX, INITY} from "../utils/constants.ts";
-import {calcx} from "../utils/generatePosition.ts";
+import Wall, {randomWallHeight, randomWallType} from "../modules/wall.ts";
+import { CANVAS_HEIGHT, WALL_Y_GAP, BLADE_RANGE} from "../utils/constants.ts";
+import {calcx, getWallXPos} from "../utils/generatePosition.ts";
 import random, { prob50 } from "../utils/random.ts";
 // import Spike from "../modules/spike.ts";
 
 
 //generate a wall
 export function generateWall(prevWall : Wall | null){
-	const x = calcx();
+	const x = getWallXPos();
 	const wallHeight = randomWallHeight();
 	const y = (prevWall) ? prevWall.y - wallHeight - WALL_Y_GAP: CANVAS_HEIGHT - wallHeight -WALL_Y_GAP; 
-	const wall = new Wall(x,y,"normal", "./images/normal-wall.png");
+	const wallType = randomWallType();
+	let wall: Wall;
+	if(wallType === 1)
+		wall = new Wall(x,y,1, "./images/normal-wall.png");
+	else 
+		wall = new Wall(x,y,2,"./images/rubber-wall.png" );
 	wall.h = wallHeight;
 	return wall;
 }
@@ -22,9 +26,6 @@ export function generateWall(prevWall : Wall | null){
 // generate num number of walls
 export function generateWalls(num: number) {
 	const walls: Wall[] = [];
-	const startWall = new Wall(INITX, INITY, "normal", "./images/normal-wall.png");
-	startWall.spike = null;
-	walls.push(startWall);
 	for (let i = 0; i < num; ++i) {
 		let wall = walls.length ? generateWall(walls[walls.length-1]) : generateWall(null);
         walls.push(wall);
@@ -61,7 +62,7 @@ export function generateBlades(num: number){
 
 
 // update wall list
-export function updateWalls(walls: Wall[], player: Player){
+export function updateWalls(walls: Wall[]){
 	// condition checks if the gap between top most wall and the starting-y of canvas
 	// is greater than wall gap in y-axis
 	// if true then new wall is created and add to the list
@@ -70,48 +71,18 @@ export function updateWalls(walls: Wall[], player: Player){
 		const newWallHeight = randomWallHeight();
 		const newWallY = walls[walls.length - 1].y - WALL_Y_GAP - newWallHeight;
 		const newWall = new Wall(
-			calcx(),
+			getWallXPos(),
 			newWallY,
-			"normal",
+			1,
 			"./images/normal-wall.png"
 		);
 		newWall.h = newWallHeight;
 		walls.push(newWall);
 	}
-
-	walls.forEach((wall) => {
-		// update wall position only if it moves down from current position
-		if((wall.y - player.dy) > wall.y){
-			wall.y -= player.dy * 2;
-			if(wall.spike)
-				wall.spike.y -= player.dy*2;
-		}
-
-		if (wall.y > CANVAS_HEIGHT) {
-			//remove the wall(i.e first wall in the list) that goes out of canvas
-			walls.shift();
-
-			//first wall in the array is removed and second wall becomes the first wall
-			//which causes the new first wall disappear as first wall
-			//(i.e wall that is already removed from the list) is already displayed
-			//but new first is not displayed yet so to make the new wall appear again
-			// re-draw the new first wall i.e wall at near bottom of canvas
-			if (walls[0]) {
-				if((walls[0].y - player.dy) > walls[0].y){
-					walls[0].y -= player.dy * 2;
-					if(wall.spike)
-						wall.spike.w -= player.dy *2;
-				}
-
-				walls[0].draw();
-			}
-		}
-	});
 }
 
-export function updateBlades(blades: Blade[], player:Player){
+export function updateBlades(blades: Blade[]){
     blades.forEach((blade) => {
-        blade.y -= player.dy;
         if(blade.y > CANVAS_HEIGHT) blades.shift();
     }); 
 
