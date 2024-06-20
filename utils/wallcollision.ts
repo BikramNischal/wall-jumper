@@ -1,5 +1,6 @@
 import Player from "../modules/player.ts";
 import Wall from "../modules/wall.ts";
+import { PLAYERDX } from "./constants.ts";
 
 export function normalCollision(player: Player, wall: Wall) {
 	// Adjust player position based on collision side
@@ -39,10 +40,11 @@ export function normalCollision(player: Player, wall: Wall) {
 	}
 }
 
-export function rubberCollision(player:Player){
-    player.isJumping = true;
-    // player.resetJump();
-    player.jump();
-    player.isJumping = false;
 
+// jump back on collision with rubber wall 
+export function rubberCollision(player:Player){
+	player.xDirection *= -1;
+	player.dx = player.xDirection * PLAYERDX;
+	player.dy -= player.gravity;
+	player.isJumping = true;
 }

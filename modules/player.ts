@@ -145,7 +145,11 @@ export default class Player {
 			this.jumpCount = 2;
 			this.isJumping = false;
 
-			if(wall.type === 2) this.isJumping = true;
+			if(wall.type === 2) {
+				this.isJumping = true;
+				--this.jumpCount;
+				rubberCollision(this);
+			}
 		}
 
 		normalCollision(this, wall);
