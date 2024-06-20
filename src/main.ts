@@ -1,11 +1,9 @@
 import { ctx } from "../modules/canvas.ts";
 import {
-	CANVAS_HEIGHT,
-	CANVAS_WIDTH,
+	CANVAS_SIZE,
 	INITX,
 	INITY,
-	MAIN_WALL_X,
-	MAIN_WALL_Y,
+	MAIN_WALL,
 } from "../utils/constants.ts";
 import {
 	generateWalls,
@@ -26,7 +24,7 @@ const player = new Player(
 
 const gameState = {
 	blades: generateBlades(2),
-	mainWall: new Wall(MAIN_WALL_X,MAIN_WALL_Y,0,"./images/main-platform.png"),
+	mainWall: new Wall(MAIN_WALL.x,MAIN_WALL.y,0,"./images/main-platform.png"),
 	walls: generateWalls(4),
 	player: player,
 	airJump: false,
@@ -37,7 +35,7 @@ gameState.mainWall.setMainWall();
 
 
 function Game() {
-	ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);	
+	ctx.clearRect(0, 0, CANVAS_SIZE.width, CANVAS_SIZE.height);	
 
 	gameState.player.moveInY();
 	gameState.mainWall.draw();
@@ -73,7 +71,7 @@ function Game() {
 }
 
 gameWindow.addEventListener("click", () => {
-	ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+	ctx.clearRect(0, 0, CANVAS_SIZE.width, CANVAS_SIZE.height);
 
 	if (player.jumpCount > 0) {
 		player.isJumping = true;

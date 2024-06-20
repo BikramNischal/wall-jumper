@@ -1,11 +1,10 @@
 import Blade from "../modules/blade.ts";
 import Wall, { randomWallHeight, randomWallType } from "../modules/wall.ts";
 import {
-	CANVAS_HEIGHT,
-	WALL_Y_GAP,
-	BLADE_RANGE,
-	CANVAS_WIDTH,
+	CANVAS_SIZE,
 	BALDE_SIZE,
+	WALL,
+	BLADE_RANGE
 } from "../utils/constants.ts";
 import { calcx, getWallXPos } from "../utils/generatePosition.ts";
 import random, { prob50, randomRange } from "../utils/random.ts";
@@ -16,8 +15,8 @@ export function generateWall(prevWall: Wall | null) {
 	const x = getWallXPos();
 	const wallHeight = randomWallHeight();
 	const y = prevWall
-		? prevWall.y - wallHeight - WALL_Y_GAP
-		: CANVAS_HEIGHT - wallHeight - WALL_Y_GAP;
+		? prevWall.y - wallHeight - WALL.gapY
+		: CANVAS_SIZE.height - wallHeight - WALL.gapY;
 	const wallType = randomWallType();
 	let wall: Wall;
 	if (wallType === 1) wall = new Wall(x, y, 1, "./images/normal-wall.png");
@@ -42,8 +41,8 @@ export function generateBlade() {
 	//get start and end point of the balde movement range
 	const startpos = calcx();
 	const endpos =
-		startpos + BLADE_RANGE - 2*BALDE_SIZE.width> CANVAS_WIDTH - BALDE_SIZE.width
-			? CANVAS_WIDTH
+		startpos + BLADE_RANGE - 2*BALDE_SIZE.width> CANVAS_SIZE.width - BALDE_SIZE.width
+			? CANVAS_SIZE.width - BALDE_SIZE.width
 			: startpos + BLADE_RANGE;
 
 	//generate a random x-position within the start and end range
@@ -62,13 +61,13 @@ export function generateBlade() {
 // takes number of obstacle to generate i.e num
 export function generateBlades(num: number) {
 	//Gap between blades
-	const bladeGap = CANVAS_HEIGHT / (num + 1);
+	const bladeGap = CANVAS_SIZE.height / (num + 1);
 
 	const blades: Blade[] = [];
 	for (let i = 0; i < num; ++i) {
 		const blade: Blade = generateBlade();
 		console.log(blade);
-		const y = CANVAS_HEIGHT - blade.h - bladeGap * (i + 1);
+		const y = CANVAS_SIZE.height - blade.h - bladeGap * (i + 1);
 		blade.y = y;
 		// randomly assign direction
 		blade.dx = prob50() ? 1 : -1;
@@ -86,11 +85,11 @@ export function updateWalls(walls: Wall[]) {
 	// if true then new wall is created and add to the list
 	if (walls.length) {
 		const prevWall = walls[walls.length - 1];
-		if (walls[walls.length - 1].y > WALL_Y_GAP) {
+		if (walls[walls.length - 1].y > WALL.gapY) {
 			//this calcuates the y-position of new wall
 			const newWallHeight = randomWallHeight();
 			const newWallY =
-				walls[walls.length - 1].y - WALL_Y_GAP - newWallHeight;
+				walls[walls.length - 1].y - WALL.gapY - newWallHeight;
 			const newWall = generateWall(prevWall);
 			newWall.h = newWallHeight;
 			newWall.y = newWallY;
@@ -103,7 +102,7 @@ export function updateWalls(walls: Wall[]) {
 
 export function updateBlades(blades: Blade[]) {
 	blades.forEach((blade) => {
-		if (blade.y > CANVAS_HEIGHT) blades.shift();
+		if (blade.y > CANVAS_SIZE.height) blades.shift();
 	});
 
 	if (blades.length === 0) {

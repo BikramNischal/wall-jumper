@@ -1,11 +1,8 @@
 import { ctx } from "./canvas.ts";
 import {
-	WALL_WIDTH,
-	WALL_HEIGHT_MEDIUM,
-	WALL_HEIGHT_SMALL,
+	WALL,
 	GAME_MOVEMENT,
-	MAIN_WALL_HEIGHT,
-	MAIN_WALL_WIDTH,
+	MAIN_WALL,
 } from "../utils/constants.ts";
 
 import random, {prob25 } from "../utils/random.ts";
@@ -36,8 +33,8 @@ export default class Wall {
 		this.y = posy;
 		this.dx = 0;
 		this.dy = GAME_MOVEMENT;
-		this.w = WALL_WIDTH;
-		this.h = WALL_HEIGHT_SMALL;
+		this.w = WALL.width;
+		this.h = WALL.heightSmall;
 		this.type = type;
 		this.loaded = false;
 		this.spike = this.placeSpike();
@@ -67,8 +64,9 @@ export default class Wall {
 	}
 	
 	setMainWall(){
-		this.w = MAIN_WALL_WIDTH;
-		this.h = MAIN_WALL_HEIGHT;
+
+		this.w = MAIN_WALL.width;
+		this.h = MAIN_WALL.height;
 	}
 
 	moveInY() {
@@ -104,11 +102,11 @@ function randomWallHeight() {
 	const wallChoice = random(2);
 	switch (wallChoice) {
 		case 0:
-			return WALL_HEIGHT_SMALL;
+			return WALL.heightSmall;
 		case 1:
-			return WALL_HEIGHT_MEDIUM;
+			return WALL.heightBig;
 		default:
-			return WALL_HEIGHT_MEDIUM;
+			return WALL.heightSmall;
 	}
 }
 

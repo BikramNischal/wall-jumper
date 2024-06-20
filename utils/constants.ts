@@ -2,13 +2,25 @@ import { canvas } from "../modules/canvas";
 
 const GAME_MOVEMENT = 2;
 
-const CANVAS_WIDTH: number = canvas.width;
-const CANVAS_HEIGHT: number = canvas.height;
+const CANVAS_SIZE = {
+	width: canvas.width,
+	height: canvas.height,
+}
 
-const MAIN_WALL_WIDTH :number = 64;
-const MAIN_WALL_HEIGHT:number = CANVAS_HEIGHT + 100;
-const MAIN_WALL_X:number = 0;
-const MAIN_WALL_Y:number = -64;
+const MAIN_WALL= {
+	x: 0,
+	y:-64,
+	width: 64,
+	height: CANVAS_SIZE.height+ 100,
+}
+
+const WALL = {
+	width: 10,	
+	heightSmall : 72,
+	heightBig: 160,
+	gapX: 150,
+	gapY: 150,
+}
 
 const WALL_WIDTH: number = 10;
 const WALL_HEIGHT_SMALL: number = 72;
@@ -38,16 +50,13 @@ export type Direction = "horizontal" | "vertical";
 export type obstacleFace = "right" | "left"
 
 
-const INITX = 0 + MAIN_WALL_WIDTH;
-const INITY = CANVAS_HEIGHT/2;
+const INITX = 0 + MAIN_WALL.width;
+const INITY = CANVAS_SIZE.height/2;
 
 export {
-	CANVAS_HEIGHT,
-	CANVAS_WIDTH,
-	MAIN_WALL_HEIGHT,
-	MAIN_WALL_WIDTH,
-	MAIN_WALL_X,
-	MAIN_WALL_Y,
+	CANVAS_SIZE,
+	MAIN_WALL,
+	WALL,
 	WALL_WIDTH,
 	WALL_HEIGHT_BIG,
 	WALL_HEIGHT_MEDIUM,
