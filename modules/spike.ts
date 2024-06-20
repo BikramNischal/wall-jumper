@@ -1,6 +1,6 @@
 import { ctx } from "./canvas.ts";
 import Obstacle from "./obstacle.ts";
-import { obstacleFace } from "../utils/constants.ts";
+import { GAME_MOVEMENT, obstacleFace } from "../utils/constants.ts";
 import { prob50 } from "../utils/random.ts";
 
 export default class Spike extends Obstacle {
@@ -43,18 +43,9 @@ export default class Spike extends Obstacle {
 		}
 	}
 
-	drawSpike(imgsrc: string) {
-		this.img.src = imgsrc;
-		this.img.onload = () => {
-			this.loaded = true;
-			this.draw();
-		};
+	moveInY() {
+		this.y += GAME_MOVEMENT;
 	}
+
 }
 
-// generate spicke according to the face and type
-export function generateSpike() {
-	const face = prob50() ? "right" : "left";
-	let spike: Spike = new Spike(0, 0, face);
-	return spike;
-}

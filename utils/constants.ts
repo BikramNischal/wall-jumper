@@ -29,12 +29,19 @@ const WALL = {
 const PLAYERDX:number = 8;
 const PLAYERDY:number = -6;
 
+//spikes contants
+const SPIKE_SIZE = {
+	width: 24,
+	height: 24,
+}
+
 //blade constants 
 const BALDE_SIZE = {
 	width: 32,
 	height:32,
 };
 
+// enemy constants 
 const ENEMY_SIZE = {
 	width: 32,
 	height:32,
@@ -45,9 +52,11 @@ const BLADE_RANGE = 100;
 
 export type Direction = "horizontal" | "vertical";
 export type obstacleFace = "right" | "left"
+
+// TODO make type for GameState global variable
 export type GameState = {
 	blades:Blade[];
-	
+
 
 }
 
@@ -62,6 +71,7 @@ export {
 	PLAYERDX,
 	PLAYERDY,
 	ENEMY_SIZE,
+	SPIKE_SIZE,
 	GAME_MOVEMENT,
 	BLADE_RANGE,
 	INITX,

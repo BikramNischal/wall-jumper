@@ -6,7 +6,8 @@ import {
 } from "../utils/constants.ts";
 
 import random, {prob25} from "../utils/random.ts";
-import Spike, { generateSpike } from "./spike.ts";
+import Spike from "./spike.ts";
+import { generateRandomSpike } from "../src/generateGameObjects.ts";
 
 /*
 Wall types 
@@ -82,7 +83,7 @@ export default class Wall {
 	placeSpike() {
 		const hasSpike = prob25();
 		if (hasSpike && this.type < 2 ) {
-			const spike = generateSpike();
+			const spike = generateRandomSpike();
 			if (spike.face === "left") {
 				spike.x = this.x - spike.w ;
 			} else {

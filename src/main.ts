@@ -1,7 +1,6 @@
 import { ctx } from "../modules/canvas.ts";
 import {
 	CANVAS_SIZE,
-	ENEMY_SIZE,
 	INITX,
 	INITY,
 	MAIN_WALL,
@@ -13,10 +12,11 @@ import {
 	updateBlades,
 	generateEnemy,
 	generateEnemys,
+	generateMainSpikes,
+	updateMainSpikes,
 } from "./generateGameObjects.ts";
 import Player from "../modules/player.ts";
 import Wall from "../modules/wall.ts";
-import Enemy from "../modules/enemy.ts";
 import { prob25 } from "../utils/random.ts";
 
 const player = new Player(INITX, INITY, "./images/grab-left.png");
@@ -33,9 +33,9 @@ const gameState = {
 	player: player,
 	gameSpeed: 0,
 	enemys: generateEnemys(),
+	mainWallSpikes: generateMainSpikes(),
 };
 
-let enemy = new Enemy(200, 200, "./images/demon.png", 79, 69, 4);
 let pause = false;
 
 gameState.mainWall.setMainWall();
@@ -50,6 +50,7 @@ function Game() {
 		if (makeEnemy) gameState.enemys.push(generateEnemy());
 	}
 
+	//check for enemy render and move enemy
 	if (gameState.enemys.length) {
 		if (gameState.enemys[0].y > CANVAS_SIZE.height)
 			gameState.enemys.shift();
@@ -60,9 +61,17 @@ function Game() {
 		});
 	}
 
+	// move player down with gamespeed
 	gameState.player.moveInY();
-	gameState.mainWall.draw();
 
+	//draw main wall
+	gameState.mainWall.draw();
+	gameState.mainWallSpikes.forEach((spike)=>{
+		spike.moveInY();
+		spike.draw();	
+	});
+
+	// check for collision in the main wall
 	gameState.player.collisionWall(gameState.mainWall);
 	if (gameState.player.jumpCount) gameState.player.draw();
 	else gameState.player.drawJumpSprite();
@@ -71,8 +80,8 @@ function Game() {
 		player.jump();
 	}
 
-	updateBlades(gameState.blades);
-	updateWalls(gameState.walls);
+
+	//move walls  and spikes  down and check for collision
 	gameState.walls.forEach((wall) => {
 		wall.moveInY();
 		wall.draw();
@@ -85,11 +94,20 @@ function Game() {
 		}
 		player.collisionWall(wall);
 	});
+
+
+	//move blades down and check collision 
+	//TODO Collision detection
 	gameState.blades.forEach((blade) => {
 		blade.moveInY();
 		blade.draw();
 		blade.oscillate();
 	});
+
+	// update walls and blades
+	updateBlades(gameState.blades);
+	updateWalls(gameState.walls);
+	updateMainSpikes(gameState.mainWallSpikes);
 
 	if (pause) return;
 

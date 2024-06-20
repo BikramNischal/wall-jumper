@@ -4,12 +4,17 @@ import {
 	CANVAS_SIZE,
 	BALDE_SIZE,
 	WALL,
-	BLADE_RANGE
+	BLADE_RANGE,
+	obstacleFace,
+	SPIKE_SIZE,
+	MAIN_WALL
 } from "../utils/constants.ts";
 import { calcx, getWallXPos } from "../utils/generatePosition.ts";
 import random, { prob50, randomRange } from "../utils/random.ts";
 import Enemy from "../modules/enemy.ts";
-// import Spike from "../modules/spike.ts";
+import Spike from "../modules/spike.ts";
+
+
 
 //generate a wall
 export function generateWall(prevWall: Wall | null) {
@@ -38,6 +43,8 @@ export function generateWalls(num: number) {
 	return walls;
 }
 
+
+//generate blade moving blades from startpos point to endpos point
 export function generateBlade() {
 	//get start and end point of the balde movement range
 	const startpos = calcx();
@@ -100,6 +107,9 @@ export function updateWalls(walls: Wall[]) {
 	}
 }
 
+
+//remove blades from array as they go out of canvas
+// and generate more blade if the array is empty
 export function updateBlades(blades: Blade[]) {
 	blades.forEach((blade) => {
 		if (blade.y > CANVAS_SIZE.height) blades.shift();
@@ -113,6 +123,50 @@ export function updateBlades(blades: Blade[]) {
 		});
 		blades.push(...newBlades);
 	}
+}
+
+//generate spike facing the give direction
+export function generateSpike(face: obstacleFace){
+	let spike: Spike = new Spike(0, 0, face);
+	return spike;
+}
+
+// generate spike according to the face and type
+// for moving walls 
+export function generateRandomSpike() {
+	const face = prob50() ? "right" : "left";
+	return generateSpike(face);
+}
+
+//generate spikes for main wall on the left
+export function generateMainSpikes(){
+	const spikeGap = SPIKE_SIZE.height * 5;
+	const spikeNum = random(4);
+	const spikes : Spike[] = [];
+	for(let i = 0; i< spikeNum; ++i){
+		let y = 0;
+		if(spikes.length)	
+			y = spikes[spikes.length-1].y - spikeGap;
+		const spike = new Spike(MAIN_WALL.width, y, "right");
+		spike.w = 32;
+		spike.h = 32;
+		spike.x = spike.x - 5;
+		spikes.push(spike);
+	}
+	return spikes;
+}
+
+// update spikes list of main wall
+export function updateMainSpikes(spikes: Spike[]){
+	spikes.forEach((spike) => {
+		if (spike.y > CANVAS_SIZE.height) spikes.shift();
+	});
+
+	if (spikes.length === 0) {
+		const newSpikes = generateMainSpikes();
+		spikes.push(...newSpikes);
+	}
+
 }
 
 
