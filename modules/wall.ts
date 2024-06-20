@@ -5,7 +5,7 @@ import {
 	MAIN_WALL,
 } from "../utils/constants.ts";
 
-import random, {prob25 } from "../utils/random.ts";
+import random, {prob25} from "../utils/random.ts";
 import Spike, { generateSpike } from "./spike.ts";
 
 /*
@@ -38,7 +38,6 @@ export default class Wall {
 		this.type = type;
 		this.loaded = false;
 		this.spike = this.placeSpike();
-
 		this.img = new Image();
 		this.img.src = imgsrc;
 		this.img.onload = () => {
@@ -85,11 +84,12 @@ export default class Wall {
 		if (hasSpike && this.type < 2 ) {
 			const spike = generateSpike();
 			if (spike.face === "left") {
-				spike.x = this.x - spike.w;
+				spike.x = this.x - spike.w ;
 			} else {
 				spike.x = this.x + this.w;
 			}
-			spike.y = this.y + this.h / 2;	
+			let y = this.y + random(this.h - spike.h);	
+			spike.y = y;
 			return spike;
 		} else {
 			return null;

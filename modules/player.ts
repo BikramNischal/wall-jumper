@@ -154,9 +154,6 @@ export default class Player {
 
 		normalCollision(this, wall);
 
-	
-
-		
 	}
 
 	// move player downwards with game speed

@@ -8,6 +8,7 @@ import {
 } from "../utils/constants.ts";
 import { calcx, getWallXPos } from "../utils/generatePosition.ts";
 import random, { prob50, randomRange } from "../utils/random.ts";
+import Enemy from "../modules/enemy.ts";
 // import Spike from "../modules/spike.ts";
 
 //generate a wall
@@ -66,7 +67,6 @@ export function generateBlades(num: number) {
 	const blades: Blade[] = [];
 	for (let i = 0; i < num; ++i) {
 		const blade: Blade = generateBlade();
-		console.log(blade);
 		const y = CANVAS_SIZE.height - blade.h - bladeGap * (i + 1);
 		blade.y = y;
 		// randomly assign direction
@@ -113,4 +113,15 @@ export function updateBlades(blades: Blade[]) {
 		});
 		blades.push(...newBlades);
 	}
+}
+
+
+export function generateEnemy(){
+	const x = calcx();
+	return new Enemy(x, 0, "./images/demon-left.png", 79, 69, 4);		
+}
+
+export function generateEnemys(){
+	const enemys : Enemy[] = []
+	return enemys;
 }
