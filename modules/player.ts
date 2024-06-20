@@ -34,7 +34,7 @@ export default class Player {
 		// movement agents and variables
 		this.xDirection = 1;
 		this.horizontalDelay = 0.1;
-		this.gravity = 0.5;
+		this.gravity = 0.1;
 		this.dx = PLAYERDX;
 		this.dy = PLAYERDY;
 		this.isJumping = false;

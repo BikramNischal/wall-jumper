@@ -1,5 +1,5 @@
 import { MovingObstacle } from "./obstacle";
-import { Direction} from "../utils/constants";
+import { BALDE_SIZE, Direction} from "../utils/constants";
 import { ctx } from "./canvas";
 
 export default class Blade extends MovingObstacle {
@@ -21,8 +21,8 @@ export default class Blade extends MovingObstacle {
         this.spriteWidth= 164.5;
         this.currentFrame = 0;
         this.totalFrame = 5;
-        this.h = 32;
-        this.w = 32;
+        this.h = BALDE_SIZE.height;
+        this.w = BALDE_SIZE.width;
 		this.dx= 1;
 
 	}

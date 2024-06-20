@@ -22,10 +22,17 @@ const WALL_Y_GAP = 150;
 
 
 //player movement speed
-const PLAYERDX:number = 12;
-const PLAYERDY:number = -12;
+const PLAYERDX:number = 8;
+const PLAYERDY:number = -6;
+
+//blade constants 
+const BALDE_SIZE = {
+	width: 32,
+	height:32,
+};
+
 //blade movement range
-const BLADE_RANGE = 50;
+const BLADE_RANGE = 100;
 
 export type Direction = "horizontal" | "vertical";
 export type obstacleFace = "right" | "left"
@@ -52,5 +59,6 @@ export {
 	GAME_MOVEMENT,
 	BLADE_RANGE,
 	INITX,
-	INITY
+	INITY,
+	BALDE_SIZE
 };

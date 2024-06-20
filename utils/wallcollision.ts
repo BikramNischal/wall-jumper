@@ -45,6 +45,6 @@ export function normalCollision(player: Player, wall: Wall) {
 export function rubberCollision(player:Player){
 	player.xDirection *= -1;
 	player.dx = player.xDirection * PLAYERDX;
-	player.dy -= player.gravity;
+	player.dy += player.gravity;
 	player.isJumping = true;
 }
