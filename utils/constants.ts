@@ -1,7 +1,11 @@
 import { canvas } from "../modules/canvas";
 import Blade from "../modules/blade.ts";
+import Wall from "../modules/wall.ts";
+import Player from "../modules/player.ts";
+import Enemy from "../modules/enemy.ts";
+import Spike from "../modules/spike.ts";
 
-const GAME_MOVEMENT = 1;
+const GAME_MOVEMENT = 2;
 const GAME_MOVEMENT_OFFSET = GAME_MOVEMENT + 1; 
 
 const CANVAS_SIZE = {
@@ -59,11 +63,20 @@ const BLADE_RANGE = 100;
 export type Direction = "horizontal" | "vertical";
 export type obstacleFace = "right" | "left"
 
-// TODO make type for GameState global variable
+export type GameLoop = {
+	pause:boolean;
+	start:boolean;
+}
+
 export type GameState = {
 	blades:Blade[];
-
-
+	mainWall: Wall;
+	walls: Wall[];
+	player: Player;
+	gameSpeed: number;
+	demons: Enemy[];
+	spiders: Enemy[];
+	mainWallSpikes: Spike[];
 }
 
 

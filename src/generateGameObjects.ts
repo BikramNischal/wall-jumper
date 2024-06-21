@@ -17,16 +17,28 @@ import Spike from "../modules/spike.ts";
 
 //generate a wall
 export function generateWall(prevWall: Wall | null) {
+
+	let wall: Wall;
+
 	const x = getWallXPos();
 	const wallHeight = randomWallHeight();
+
 	const y = prevWall
 		? prevWall.y - wallHeight - WALL.gapY
 		: CANVAS_SIZE.height - wallHeight - WALL.gapY;
+
 	const wallType = randomWallType();
-	let wall: Wall;
-	if (wallType === 1) wall = new Wall(x, y, 1, "./images/normal-wall.png");
-	else wall = new Wall(x, y, 2, "./images/rubber-wall.png");
+	if (wallType === 1) {
+		wall = new Wall(x, y, 1, "./images/normal-wall.png");
+	}
+	else if(wallType === 2){
+		wall = new Wall(x, y, 2, "./images/rubber-wall.png");
+	} else{
+		wall =  new Wall(x,y,3,"./images/ice-wall.png");
+	} 
+
 	wall.h = wallHeight;
+
 	return wall;
 }
 
@@ -207,16 +219,14 @@ export function generateSpiders() {
 	return spiders;
 }
 
-export function updateEnemys(enemys: Enemy[], gameSpeed: number, type: string) {
+export function updateEnemys(enemys: Enemy[], type: string) {
 	if (enemys.length) {
 		if (enemys[0].y > CANVAS_SIZE.height) enemys.shift();
 		enemys.forEach((enemy) => {
 			enemy.moveInY();
 			if (type === "demon"){
-				enemy.draw(gameSpeed);
 				enemy.moveInX();
 			}
-			else enemy.drawVertical(gameSpeed);
 		});
 	}
 }

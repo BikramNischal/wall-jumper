@@ -5,7 +5,7 @@ import {
 	MAIN_WALL,
 } from "../utils/constants.ts";
 
-import random, {prob25} from "../utils/random.ts";
+import random, {prob10, prob25} from "../utils/random.ts";
 import Spike from "./spike.ts";
 import { generateRandomSpike } from "../src/generateGameObjects.ts";
 
@@ -69,6 +69,7 @@ export default class Wall {
 		this.h = MAIN_WALL.height;
 	}
 
+	//move wall down with GAME_MOVEMENT speed
 	moveInY() {
 		this.y += GAME_MOVEMENT;
 		if(this.spike)
@@ -111,7 +112,14 @@ function randomWallHeight() {
 	}
 }
 
+// get random wall types 
 function randomWallType(){
+
+	const freezWallProb = prob10();
+	if(freezWallProb){
+		return 3;
+	}
+
 	const bounceWallProb = prob25()	;
 	if(bounceWallProb){
 		return 2;

@@ -1,5 +1,5 @@
-import { canvas, ctx } from "../modules/canvas.ts";
-import { CANVAS_SIZE, INITX, INITY, MAIN_WALL } from "../utils/constants.ts";
+import { ctx } from "../modules/canvas.ts";
+import { CANVAS_SIZE, GameState, INITX, INITY, MAIN_WALL, GameLoop } from "../utils/constants.ts";
 import {
 	generateWalls,
 	generateBlades,
@@ -13,6 +13,8 @@ import {
 	generateSpiders,
 	updateEnemys,
 } from "./generateGameObjects.ts";
+import { displayGame, displayRestartMenu } from "./handleWindow.ts";
+
 import Player from "../modules/player.ts";
 import Wall from "../modules/wall.ts";
 import { prob25 } from "../utils/random.ts";
@@ -20,34 +22,32 @@ import { prob25 } from "../utils/random.ts";
 // Game Menu and Game Window  references
 const startBtn = document.querySelector(".btn--start") as HTMLButtonElement;
 const restartBtn = document.querySelector(".btn--restart") as HTMLButtonElement;
-const mainMenu = document.querySelector(".start-menu") as HTMLDivElement;
-const restartMenu = document.querySelector(".restart-menu") as HTMLDivElement;
 
-let pause = true;
-
-const GameLoop = {
+const gameloop: GameLoop = {
 	pause: false,
 	start: false,
 };
 
-const gameState = {
-	blades: generateBlades(2),
-	mainWall: new Wall(
-		MAIN_WALL.x,
-		MAIN_WALL.y,
-		0,
-		"./images/main-platform.png"
-	),
-	walls: generateWalls(4),
-	player: new Player(INITX, INITY, "./images/grab-left.png"),
-	gameSpeed: 0,
-	demons: generateDemons(),
-	spiders: generateSpiders(),
-	mainWallSpikes: generateMainSpikes(),
+const generateGameState = () => {
+	return {
+		blades: generateBlades(2),
+		mainWall: new Wall(
+			MAIN_WALL.x,
+			MAIN_WALL.y,
+			0,
+			"./images/main-platform.png"
+		),
+		walls: generateWalls(4),
+		player: new Player(INITX, INITY, "./images/grab-left.png"),
+		gameSpeed: 0,
+		demons: generateDemons(),
+		spiders: generateSpiders(),
+		mainWallSpikes: generateMainSpikes(),
+	};
 };
-gameState.mainWall.setMainWall();
 
-function Game() {
+let gameState: GameState = generateGameState();
+function Game(gameState: GameState) {
 	ctx.clearRect(0, 0, CANVAS_SIZE.width, CANVAS_SIZE.height);
 	++gameState.gameSpeed;
 
@@ -57,8 +57,13 @@ function Game() {
 		if (makeEnemy) gameState.demons.push(generateDemon());
 	}
 
+	updateEnemys(gameState.demons, "demon");
+	gameState.demons.forEach((demon) => {
+		demon.draw(gameState.gameSpeed);
+		if (gameState.player.isColliding(demon)) displayRestartMenu(gameloop);
+	});
+
 	//check for demons for move and render
-	updateEnemys(gameState.demons, gameState.gameSpeed, "demon");
 	// move player down with gamespeed
 	gameState.player.moveInY();
 
@@ -70,11 +75,20 @@ function Game() {
 		if (makeEnemy) gameState.spiders.push(generateSpider());
 	}
 
-	updateEnemys(gameState.spiders, gameState.gameSpeed, "spider");
+	updateEnemys(gameState.spiders, "spider");
+	gameState.spiders.forEach((spider) => {
+		spider.drawVertical(gameState.gameSpeed);
+		if (gameState.player.isColliding(spider)) {
+			displayRestartMenu(gameloop);
+		}
+	});
 
 	gameState.mainWallSpikes.forEach((spike) => {
 		spike.moveInY();
 		spike.draw();
+		if (gameState.player.isColliding(spike)) {
+			displayRestartMenu(gameloop);
+		}
 	});
 
 	// check for collision in the main wall
@@ -93,7 +107,7 @@ function Game() {
 		if (wall.spike) {
 			wall.spike.draw();
 			if (gameState.player.isColliding(wall.spike)) {
-				console.log("collision with spike");
+				displayRestartMenu(gameloop);
 			}
 		}
 		gameState.player.collisionWall(wall);
@@ -105,6 +119,9 @@ function Game() {
 		blade.moveInY();
 		blade.draw();
 		blade.oscillate();
+		if (gameState.player.isColliding(blade)) {
+			displayRestartMenu(gameloop);
+		}
 	});
 
 	// update walls and blades
@@ -112,34 +129,31 @@ function Game() {
 	updateWalls(gameState.walls);
 	updateMainSpikes(gameState.mainWallSpikes);
 
-	if (GameLoop.pause) return;
+	if (gameloop.pause) return;
 
-	requestAnimationFrame(Game);
+	requestAnimationFrame(() => Game(gameState));
 }
 
 function gameLoop() {
 	//display and start game window
 	startBtn.onclick = () => {
-		mainMenu.style.display = "none";
-		canvas.style.display = "block";
-		setTimeout(()=>{
-			GameLoop.start = true;
-		}, 100);
-		Game();
+		gameloop.start = false;
+		displayGame(gameloop);
+		gameState.mainWall.setMainWall();
+		Game(gameState);
 	};
 
 	restartBtn.onclick = () => {
-		restartMenu.style.display = "none";
-		canvas.style.display = "block";
-		setTimeout(()=>{
-			GameLoop.start = true;
-		})	
-		Game();
+		gameloop.start = false;
+		displayGame(gameloop);
+		gameState = generateGameState();
+		gameState.mainWall.setMainWall();
+		Game(gameState);
 	};
 
 	document.addEventListener("click", () => {
 		// jump only if game is not pause
-		if (!GameLoop.pause && GameLoop.start) {
+		if (!gameloop.pause && gameloop.start) {
 			ctx.clearRect(0, 0, CANVAS_SIZE.width, CANVAS_SIZE.height);
 			if (gameState.player.jumpCount > 0) {
 				gameState.player.isJumping = true;
@@ -151,10 +165,10 @@ function gameLoop() {
 
 	document.addEventListener("keydown", (event) => {
 		//pause game on SPACE press
-		if (event.key === " " && pause) {
-			pause = false;
-			Game();
-		} else if (event.key === " ") pause = true;
+		if (event.key === " " && gameloop.pause) {
+			gameloop.pause = false;
+			Game(gameState);
+		} else if (event.key === " ") gameloop.pause = true;
 	});
 }
 
