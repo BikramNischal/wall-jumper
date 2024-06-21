@@ -1,7 +1,8 @@
 import { canvas } from "../modules/canvas";
 import Blade from "../modules/blade.ts";
 
-const GAME_MOVEMENT = 2;
+const GAME_MOVEMENT = 1;
+const GAME_MOVEMENT_OFFSET = GAME_MOVEMENT + 1; 
 
 const CANVAS_SIZE = {
 	width: canvas.width,
@@ -13,6 +14,7 @@ const MAIN_WALL= {
 	y:-64,
 	width: 64,
 	height: CANVAS_SIZE.height+ 100,
+	xOffSet: 5,
 }
 
 const WALL = {
@@ -26,6 +28,10 @@ const WALL = {
 }
 
 //player movement speed
+const PLAYER_MOVEMENT = {
+	dx: 8,
+	dy: -6,
+}
 const PLAYERDX:number = 8;
 const PLAYERDY:number = -6;
 
@@ -43,8 +49,8 @@ const BALDE_SIZE = {
 
 // enemy constants 
 const ENEMY_SIZE = {
-	width: 32,
-	height:32,
+	width: 24,
+	height:24,
 }
 
 //blade movement range
@@ -68,6 +74,7 @@ export {
 	CANVAS_SIZE,
 	MAIN_WALL,
 	WALL,
+	PLAYER_MOVEMENT,
 	PLAYERDX,
 	PLAYERDY,
 	ENEMY_SIZE,
@@ -76,5 +83,6 @@ export {
 	BLADE_RANGE,
 	INITX,
 	INITY,
-	BALDE_SIZE
+	BALDE_SIZE,
+	GAME_MOVEMENT_OFFSET
 };

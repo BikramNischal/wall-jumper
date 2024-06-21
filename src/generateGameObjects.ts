@@ -7,14 +7,13 @@ import {
 	BLADE_RANGE,
 	obstacleFace,
 	SPIKE_SIZE,
-	MAIN_WALL
+	MAIN_WALL,
+	GAME_MOVEMENT_OFFSET,
 } from "../utils/constants.ts";
 import { calcx, getWallXPos } from "../utils/generatePosition.ts";
 import random, { prob50, randomRange } from "../utils/random.ts";
 import Enemy from "../modules/enemy.ts";
 import Spike from "../modules/spike.ts";
-
-
 
 //generate a wall
 export function generateWall(prevWall: Wall | null) {
@@ -43,13 +42,13 @@ export function generateWalls(num: number) {
 	return walls;
 }
 
-
 //generate blade moving blades from startpos point to endpos point
 export function generateBlade() {
 	//get start and end point of the balde movement range
 	const startpos = calcx();
 	const endpos =
-		startpos + BLADE_RANGE - 2*BALDE_SIZE.width> CANVAS_SIZE.width - BALDE_SIZE.width
+		startpos + BLADE_RANGE - 2 * BALDE_SIZE.width >
+		CANVAS_SIZE.width - BALDE_SIZE.width
 			? CANVAS_SIZE.width - BALDE_SIZE.width
 			: startpos + BLADE_RANGE;
 
@@ -107,7 +106,6 @@ export function updateWalls(walls: Wall[]) {
 	}
 }
 
-
 //remove blades from array as they go out of canvas
 // and generate more blade if the array is empty
 export function updateBlades(blades: Blade[]) {
@@ -126,38 +124,37 @@ export function updateBlades(blades: Blade[]) {
 }
 
 //generate spike facing the give direction
-export function generateSpike(face: obstacleFace){
+export function generateSpike(face: obstacleFace) {
 	let spike: Spike = new Spike(0, 0, face);
 	return spike;
 }
 
 // generate spike according to the face and type
-// for moving walls 
+// for moving walls
 export function generateRandomSpike() {
 	const face = prob50() ? "right" : "left";
 	return generateSpike(face);
 }
 
 //generate spikes for main wall on the left
-export function generateMainSpikes(){
-	const spikeGap = SPIKE_SIZE.height * 5;
+export function generateMainSpikes() {
+	const spikeGap = SPIKE_SIZE.height * 10;
 	const spikeNum = random(4);
-	const spikes : Spike[] = [];
-	for(let i = 0; i< spikeNum; ++i){
+	const spikes: Spike[] = [];
+	for (let i = 0; i < spikeNum; ++i) {
 		let y = 0;
-		if(spikes.length)	
-			y = spikes[spikes.length-1].y - spikeGap;
+		if (spikes.length) y = spikes[spikes.length - 1].y - spikeGap;
 		const spike = new Spike(MAIN_WALL.width, y, "right");
 		spike.w = 32;
 		spike.h = 32;
-		spike.x = spike.x - 5;
+		spike.x = spike.x - MAIN_WALL.xOffSet;
 		spikes.push(spike);
 	}
 	return spikes;
 }
 
 // update spikes list of main wall
-export function updateMainSpikes(spikes: Spike[]){
+export function updateMainSpikes(spikes: Spike[]) {
 	spikes.forEach((spike) => {
 		if (spike.y > CANVAS_SIZE.height) spikes.shift();
 	});
@@ -166,16 +163,60 @@ export function updateMainSpikes(spikes: Spike[]){
 		const newSpikes = generateMainSpikes();
 		spikes.push(...newSpikes);
 	}
-
 }
 
-
-export function generateEnemy(){
+// generate demon at random x position
+export function generateDemon() {
 	const x = calcx();
-	return new Enemy(x, 0, "./images/demon-left.png", 79, 69, 4);		
+	return new Enemy(x, 0, "./images/demon-left.png", 79, 69, 4);
 }
 
-export function generateEnemys(){
-	const enemys : Enemy[] = []
-	return enemys;
+//generate list of demons
+export function generateDemons() {
+	const demons: Enemy[] = [];
+	return demons;
+}
+
+//generate different color spider at surface of main wall
+export function generateSpider() {
+	let imgsrc = "";
+	const randomNumber = random(4);
+	switch (randomNumber) {
+		case 0:
+			imgsrc = "./images/spider-black.png";
+			break;
+		case 1:
+			imgsrc = "./images/spider-purple.png";
+			break;
+		case 2:
+			imgsrc = "./images/spider-green.png";
+			break;
+		case 3:
+			imgsrc = "./images/spider-brown.png";
+			break;
+	}
+	const x = MAIN_WALL.x + MAIN_WALL.width - MAIN_WALL.xOffSet * 2;
+	const spider =  new Enemy(x, 0, imgsrc, 49, 80.3, 3);
+	spider.dy = GAME_MOVEMENT_OFFSET;
+	return spider;
+}
+
+//generate list of spiders
+export function generateSpiders() {
+	const spiders: Enemy[] = [];
+	return spiders;
+}
+
+export function updateEnemys(enemys: Enemy[], gameSpeed: number, type: string) {
+	if (enemys.length) {
+		if (enemys[0].y > CANVAS_SIZE.height) enemys.shift();
+		enemys.forEach((enemy) => {
+			enemy.moveInY();
+			if (type === "demon"){
+				enemy.draw(gameSpeed);
+				enemy.moveInX();
+			}
+			else enemy.drawVertical(gameSpeed);
+		});
+	}
 }

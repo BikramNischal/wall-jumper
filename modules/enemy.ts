@@ -1,5 +1,10 @@
 import { ctx } from "./canvas.ts";
-import { CANVAS_SIZE, ENEMY_SIZE, GAME_MOVEMENT, MAIN_WALL } from "../utils/constants.ts";
+import {
+	CANVAS_SIZE,
+	ENEMY_SIZE,
+	GAME_MOVEMENT,
+	MAIN_WALL,
+} from "../utils/constants.ts";
 
 export default class Enemy {
 	x: number;
@@ -65,23 +70,43 @@ export default class Enemy {
 			this.currentFrame = (this.currentFrame + 1) % this.totalFrame;
 	}
 
-    moveInY(){
-        this.y += GAME_MOVEMENT;
-    }
+	drawVertical(gameSpeed:number) {
+		if (this.loaded)
+			ctx.drawImage(
+				this.img,
+				0,
+				this.currentFrame * this.spriteHeight,
+				this.spriteWidth,
+				this.spriteHeight,
+				this.x,
+				this.y,
+				this.w,
+				this.h
+			);
+		
+		if(gameSpeed%10 === 0)
+			this.currentFrame = (this.currentFrame+1)%this.totalFrame;
+	}
 
+	moveInY() {
+		this.y += this.dy ;
+	}
 
-    changeDirection(){
-        if(this.x <= MAIN_WALL.x+MAIN_WALL.width || this.x + this.w >= CANVAS_SIZE.width){
-            this.dx *= -1;
-            if(this.dx < 0) this.img.src = "./images/demon-left.png";
-            else this.img.src = "./images/demon-right.png";
-        } else {
-            this.dx = this.dx;
-        }
-    }
+	changeDirection() {
+		if (
+			this.x <= MAIN_WALL.x + MAIN_WALL.width ||
+			this.x + this.w >= CANVAS_SIZE.width
+		) {
+			this.dx *= -1;
+			if (this.dx < 0) this.img.src = "./images/demon-left.png";
+			else this.img.src = "./images/demon-right.png";
+		} else {
+			this.dx = this.dx;
+		}
+	}
 
-    moveInX(){
-        this.changeDirection()
-        this.x += this.dx;
-    }
+	moveInX() {
+		this.changeDirection();
+		this.x += this.dx;
+	}
 }

@@ -45,15 +45,15 @@ export default class Player {
 		this.img.src = imgsrc;
 
 		this.img.onload = () => {
-			this.loaded = true;
+			this.loaded= true;
 			this.draw();
-		};
+		}	 
 
 		// for airjump sprites
 		this.spriteHeight = 67;
 		this.spriteWidth = 64;
 		this.currentFrame = 0;
-		this.totalFrame = 8;
+		this.totalFrame = 8;			
 	}
 
 	draw() {
@@ -68,7 +68,7 @@ export default class Player {
 		// ctx.stroke();
 	}
 
-	drawJumpSprite() {
+	drawJumpSprite(gameSpeed: number) {
 		if (this.loaded) {
 			ctx.drawImage(
 				this.img,
@@ -82,7 +82,8 @@ export default class Player {
 				48
 			);
 
-			this.currentFrame = (this.currentFrame + 1) % this.totalFrame;
+			if (gameSpeed % 2 === 0)
+				this.currentFrame = (this.currentFrame + 1) % this.totalFrame;
 		}
 	}
 
@@ -128,7 +129,6 @@ export default class Player {
 		if (this.dy > -PLAYERDY) {
 			this.dy = -PLAYERDY;
 		}
-
 	}
 
 	isColliding(object: Wall | Obstacle) {
@@ -145,7 +145,7 @@ export default class Player {
 			this.jumpCount = 2;
 			this.isJumping = false;
 
-			if(wall.type === 2) {
+			if (wall.type === 2) {
 				this.isJumping = true;
 				--this.jumpCount;
 				rubberCollision(this);
@@ -153,7 +153,6 @@ export default class Player {
 		}
 
 		normalCollision(this, wall);
-
 	}
 
 	// move player downwards with game speed
