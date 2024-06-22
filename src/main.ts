@@ -29,7 +29,6 @@ import { displayGame, displayRestartMenu } from "./handleWindow.ts";
 import Player from "../modules/player.ts";
 import Wall from "../modules/wall.ts";
 import { prob25 } from "../utils/random.ts";
-import Blade from "../modules/blade.ts";
 
 // Game Menu and Game Window  references
 const startBtn = document.querySelector(".btn--start") as HTMLButtonElement;
@@ -69,25 +68,22 @@ function Game(gameState: GameState) {
 	ctx.clearRect(0, 0, CANVAS_SIZE.width, CANVAS_SIZE.height);
 	++gameState.gameSpeed;
 
-	// random enemy generation
+	//draw main(left most) wall
+	gameState.mainWall.draw();
+
+	// random enemy generation according to game speed
 	if (gameState.gameSpeed % 500 === 0) {
 		const makeEnemy = prob25();
 		if (makeEnemy) gameState.demons.push(generateDemon());
 	}
 
+	// update enemy list and enemy position 
 	updateEnemys(gameState.demons, "demon");
-
-	// gameState.demons.forEach((demon) => {
-	// 	demon.draw(gameState.gameSpeed);
-	// 	if (gameState.player.isColliding(demon)) {
-	// 		displayRestartMenu(gameStatus);
-	// 		return;
-	// 	}
-	// });
 
 	for (let i = 0; i < gameState.demons.length && !gameStatus.restart; ++i) {
 		const demon = gameState.demons[i];
 		demon.draw(gameState.gameSpeed);
+		//on collision update gameStatus and display restart window and exit game window
 		if (gameState.player.isColliding(demon)) {
 			gameStatus.restart = true;
 			displayRestartMenu(gameStatus);
@@ -95,28 +91,21 @@ function Game(gameState: GameState) {
 		}
 	}
 
-	//draw main wall
-	gameState.mainWall.draw();
-
+	// generate spiders according to game speed
 	if (gameState.gameSpeed % 300 === 0) {
 		const makeEnemy = prob25();
 		if (makeEnemy) gameState.spiders.push(generateSpider());
 	}
 
+	
+	// update enemy list and move them along game
 	updateEnemys(gameState.spiders, "spider");
 
-
-	// gameState.spiders.forEach((spider) => {
-	// 	spider.drawVertical(gameState.gameSpeed);
-	// 	if (gameState.player.isColliding(spider)) {
-	// 		displayRestartMenu(gameStatus);
-	// 		return;
-	// 	}
-	// });
-
+	// collision detection for spiders
 	for (let i = 0; i < gameState.spiders.length && !gameStatus.restart; ++i) {
 		const spider = gameState.spiders[i];
 		spider.drawVertical(gameState.gameSpeed);
+		//on collision update gameStatus and display restart window and exit game window
 		if (gameState.player.isColliding(spider)) {
 			gameStatus.restart = true;
 			displayRestartMenu(gameStatus);
@@ -124,19 +113,12 @@ function Game(gameState: GameState) {
 		}
 	}
 
-	// gameState.mainWallSpikes.forEach((spike) => {
-	// 	spike.moveInY();
-	// 	spike.draw();
-	// 	if (gameState.player.isColliding(spike)) {
-	// 		displayRestartMenu(gameStatus);
-	// 		return;
-	// 	}
-	// });
-
+	// collision detection for spikes on the left wall
 	for(let i =0; i< gameState.mainWallSpikes.length && !gameStatus.restart; ++i){
 		const spike = gameState.mainWallSpikes[i];
 		spike.moveInY();
 		spike.draw();
+		//on collision update gameStatus and display restart window and exit game window
 		if(gameState.player.isColliding(spike)){
 			gameStatus.restart = true;
 			displayRestartMenu(gameStatus);
@@ -151,7 +133,7 @@ function Game(gameState: GameState) {
 	// check for collision in the main wall
 	gameState.player.collisionWall(gameState.mainWall);
 
-	// rander player image
+	// rander player image and jumping sprite
 	if (gameState.player.jumpCount) {
 		gameState.player.draw();
 	} else gameState.player.drawJumpSprite(gameState.gameSpeed);
@@ -161,24 +143,7 @@ function Game(gameState: GameState) {
 		gameState.player.jump();
 	}
 
-	//move walls  and spikes  down and check for collision
-	// gameState.walls.forEach((wall) => {
-	// 	wall.moveInY();
-	// 	wall.draw();
-	// 	if (wall.effect) {
-	// 		wall.effect.draw();
-	// 	}
-
-	// 	if (wall.spike) {
-	// 		wall.spike.draw();
-	// 		if (gameState.player.isColliding(wall.spike)) {
-	// 			displayRestartMenu(gameStatus);
-	// 			return;
-	// 		}
-	// 	}
-	// 	gameState.player.collisionWall(wall);
-	// });
-
+	// update wall position and check collision
 	for(let i =0; i < gameState.walls.length && !gameStatus.restart; ++i){
 		const wall = gameState.walls[i];
 		wall.moveInY();
@@ -190,6 +155,7 @@ function Game(gameState: GameState) {
 
 		if(wall.spike){
 			wall.spike.draw();
+			//on collision update gameStatus and display restart window and exit game window
 			if(gameState.player.isColliding(wall.spike)){
 				gameStatus.restart = true;
 				displayRestartMenu(gameStatus);
@@ -201,25 +167,13 @@ function Game(gameState: GameState) {
 
 
 	//move blades down and check collision
-	//TODO Collision detection
-
-	// gameState.blades.forEach((blade) => {
-	// 	blade.moveInY();
-	// 	blade.draw();
-	// 	blade.oscillate();
-	// 	if (gameState.player.isColliding(blade)) {
-	// 		displayRestartMenu(gameStatus);
-	// 		return;
-	// 	}
-	// });
-
-
 	for(let i = 0; i< gameState.blades.length; ++i){
 		const blade = gameState.blades[i];
 		blade.moveInY();
 		blade.draw();
 		blade.oscillate();
 
+		//on collision update gameStatus and display restart window and exit game window
 		if(gameState.player.isColliding(blade)){
 			gameStatus.restart = true;
 			displayRestartMenu(gameStatus);
@@ -227,15 +181,12 @@ function Game(gameState: GameState) {
 		}
 	}
 
-	// update walls and blades
+	// update walls, blades and spikes
 	updateBlades(gameState.blades);
 	updateWalls(gameState.walls);
 	updateMainSpikes(gameState.mainWallSpikes);
 
 	if (gameStatus.pause) return;
-	// if(gameStatus.restart){
-	// 	return;
-	// }
 
 	requestAnimationFrame(() => Game(gameState));
 }

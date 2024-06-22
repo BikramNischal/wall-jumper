@@ -9,7 +9,7 @@ import { WALL, CANVAS_SIZE, GameState  } from "../utils/constants.ts";
 import random from "../utils/random.ts";
 
 
-// update wall list
+// update walls list
 export function updateWalls(walls: Wall[]) {
 	// condition checks if the gap between top most wall and the starting-y of canvas
 	// is greater than wall gap in y-axis
