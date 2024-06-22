@@ -48,10 +48,10 @@ body{
 }
 
 .game-title, .game-over{
-  font-family: "Press Start 2P", sans-serif;
-  font-size: 80px;
+  font-family: "Offside", sans-serif;
+  font-size: 96px;
   font-weight: 700;
-  transform: rotateY(0deg) rotate(-15deg);
+  /* transform: rokateY(0deg) rotate(-15deg); */
   color: transparent;
   background-image: linear-gradient(to right,red,purple);
   background-clip: text;
@@ -67,18 +67,37 @@ body{
   transform: rotateY(0deg) rotate(-30deg);
 } */
 
+
+.input-start{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.user-name{
+  padding-left : 20px;
+  width: 100%;
+  min-height: 30px;
+  border-radius: 15px;
+}
+
+
 .btn{
-  border:1px solid #6118b5;
+  font-family: "Nova Slim",sans-serif;
+  border:5px solid #B79677;
   border-radius: 10px;
-  background-color: #6118b5;
-  color: white;
+  background-color: #9BCE19;
+  color: #FFFEF9;
   padding: 10px;
   font-size: 32px;
+  transition: all 1s;
 }
 
 .btn:hover{
-  background-color:transparent;
-  color :#6118b5;
+  transform: scale(1.2);
+  transition: all 1s;
 }
 
 

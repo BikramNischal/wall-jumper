@@ -8,6 +8,7 @@ export default class Blade extends MovingObstacle {
     currentFrame: number;
     totalFrame:number;
 
+
 	constructor(
 		posx: number,
 		posy: number,
@@ -24,6 +25,7 @@ export default class Blade extends MovingObstacle {
         this.h = BALDE_SIZE.height;
         this.w = BALDE_SIZE.width;
 		this.dx= 1;
+		this.pointValue= 2;
 
 	}
 

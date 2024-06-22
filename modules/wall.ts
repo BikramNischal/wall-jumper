@@ -9,6 +9,7 @@ import random, {prob10, prob25} from "../utils/random.ts";
 import Spike from "./spike.ts";
 import { generateRandomSpike } from "../src/generateGameObjects.ts";
 import Effect from "./effect.ts";
+import Sound from "./sound.ts";
 
 /*
 Wall types 
@@ -31,6 +32,10 @@ export default class Wall {
 	spike: Spike | null;
 	effect : Effect | null;	
 	effectUsed: boolean;
+	pointValue:number;
+
+	// sound effect
+	sound: Sound | null;
 
 	constructor(posx: number, posy: number, type: number, imgsrc: string) {
 		this.x = posx;
@@ -39,6 +44,9 @@ export default class Wall {
 		this.dy = GAME_MOVEMENT;
 		this.w = WALL.width;
 		this.h = WALL.heightSmall;
+		this.pointValue = 1;
+
+
 		this.type = type;
 		this.loaded = false;
 		this.spike = this.placeSpike();
@@ -51,6 +59,10 @@ export default class Wall {
 
 		this.effect= null;
 		this.effectUsed = false;
+
+		//for sound effect 
+		this.sound = null;
+		
 	}
 
 	updateImage(imgsrc: string) {

@@ -14,6 +14,7 @@ import { calcx, getWallXPos } from "../utils/generatePosition.ts";
 import random, { prob50, randomRange } from "../utils/random.ts";
 import Enemy from "../modules/enemy.ts";
 import Spike from "../modules/spike.ts";
+import { ctx } from "../modules/canvas.ts";
 
 //generate a wall
 export function generateWall(prevWall: Wall | null) {
@@ -169,4 +170,11 @@ export function generateSpiders() {
 	const spiders: Enemy[] = [];
 	return spiders;
 }
+
+export function displayScore(score:number){
+	ctx.fillStyle = "white";
+	ctx.font = "50px Offside"
+	ctx.fillText (`${score}`, CANVAS_SIZE.width/2, 50);
+}
+
 

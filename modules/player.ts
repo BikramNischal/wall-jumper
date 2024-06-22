@@ -12,6 +12,9 @@ import {
 	rubberCollision,
 } from "../utils/wallcollision.ts";
 
+import Sound from "./sound.ts";
+import Enemy from "./enemy.ts";
+
 export default class Player {
 	x: number;
 	y: number;
@@ -32,6 +35,11 @@ export default class Player {
 	spriteHeight: number;
 	currentFrame: number;
 	totalFrame: number;
+
+	//for sounds  
+	jumpSound : Sound;
+	airJumpSound:Sound;
+	fallSound: Sound;
 
 	constructor(posx: number, posy: number, imgsrc: string) {
 		this.x = posx;
@@ -62,6 +70,11 @@ export default class Player {
 		this.spriteWidth = 64;
 		this.currentFrame = 0;
 		this.totalFrame = 8;
+
+		// for player sounds 
+		this.jumpSound = new Sound("./sounds/jumpsound.m4a");
+		this.airJumpSound = new Sound("./sounds/airjumpsound.m4a");
+		this.fallSound = new  Sound("./sounds/fallsound.m4a");
 	}
 
 	draw() {
@@ -140,7 +153,7 @@ export default class Player {
 
 	}
 
-	isColliding(object: Wall | Obstacle) {
+	isColliding(object: Wall | Obstacle | Enemy) {
 		return (
 			object.x < this.x + this.w &&
 			object.x + object.w > this.x &&
@@ -155,9 +168,14 @@ export default class Player {
 			this.isJumping = false;
 
 			if (wall.type === 2) {
+				wall.sound = new Sound("./sounds/rubberbounce1.mp3");
+				wall.sound.play();
 				this.isJumping = true;
 				--this.jumpCount;
 				rubberCollision(this);
+			} else if (wall.type === 3){
+				wall.sound = new Sound("./sounds/freezingSound.m4a");
+				wall.sound.play();
 			}
 		}
 

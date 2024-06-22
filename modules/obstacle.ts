@@ -1,5 +1,6 @@
 import { ctx } from "./canvas.ts";
 import { GAME_MOVEMENT, Direction } from "../utils/constants.ts";
+import Sound from "./sound.ts";
 
 export default class Obstacle {
 	x: number;
@@ -8,8 +9,14 @@ export default class Obstacle {
 	dy: number;
 	w: number;
 	h: number;
+	pointValue: number;
+
+	// obstacle image
 	img: HTMLImageElement;
 	loaded: boolean;
+	
+	// obstacle collision sound 
+	collisionSound : Sound;
 
 	constructor(
 		posx: number,
@@ -21,9 +28,15 @@ export default class Obstacle {
 		this.dy = 10;
 		this.w = 64;
 		this.h = 64;
+		this.pointValue = 1;
 
+		// obstacle image
 		this.loaded = false;
 		this.img = new Image();
+
+		//obstacle collision sound 
+		this.collisionSound = new Sound("./sounds/obstaclecollision.m4a");
+
 	}
 
 

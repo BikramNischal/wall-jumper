@@ -1,21 +1,29 @@
-
-import Wall, {randomWallHeight} from "../modules/wall.ts";
+import Wall, { randomWallHeight } from "../modules/wall.ts";
 import Blade from "../modules/blade.ts";
 import Spike from "../modules/spike.ts";
 import Enemy from "../modules/enemy.ts";
 
-import { generateWall, generateBlades, generateMainSpikes } from "./generateGameObjects.ts";
-import { WALL, CANVAS_SIZE, GameState  } from "../utils/constants.ts";
+import {
+	generateWall,
+	generateBlades,
+	generateMainSpikes,
+} from "./generateGameObjects.ts";
+import { WALL, CANVAS_SIZE, GameState } from "../utils/constants.ts";
 import random from "../utils/random.ts";
 
-
 // update walls list
-export function updateWalls(walls: Wall[]) {
+export function updateWalls(walls: Wall[], gameState: GameState) {
 	// condition checks if the gap between top most wall and the starting-y of canvas
 	// is greater than wall gap in y-axis
 	// if true then new wall is created and add to the list
 	if (walls.length) {
 		const prevWall = walls[walls.length - 1];
+
+		if(prevWall.y > CANVAS_SIZE.height){
+			gameState.score += walls[0].pointValue;
+			walls.shift();
+		}
+
 		if (walls[walls.length - 1].y > WALL.gapY) {
 			//this calcuates the y-position of new wall
 			const newWallHeight = randomWallHeight();
@@ -33,9 +41,12 @@ export function updateWalls(walls: Wall[]) {
 
 //remove blades from array as they go out of canvas
 // and generate more blade if the array is empty
-export function updateBlades(blades: Blade[]) {
+export function updateBlades(blades: Blade[], gameState: GameState) {
 	blades.forEach((blade) => {
-		if (blade.y > CANVAS_SIZE.height) blades.shift();
+		if (blade.y > CANVAS_SIZE.height) {
+			gameState.score += blade.pointValue;
+			blades.shift();
+		}
 	});
 
 	if (blades.length === 0) {
@@ -49,9 +60,12 @@ export function updateBlades(blades: Blade[]) {
 }
 
 // update spikes list of main wall
-export function updateMainSpikes(spikes: Spike[]) {
+export function updateMainSpikes(spikes: Spike[], gameState: GameState) {
 	spikes.forEach((spike) => {
-		if (spike.y > CANVAS_SIZE.height) spikes.shift();
+		if (spike.y > CANVAS_SIZE.height){
+			gameState.score += spike.pointValue;
+			spikes.shift();
+		}
 	});
 
 	if (spikes.length === 0) {
@@ -60,30 +74,35 @@ export function updateMainSpikes(spikes: Spike[]) {
 	}
 }
 
-
 //update enemy list
-export function updateEnemys(enemys: Enemy[], type: string) {
+export function updateEnemys(enemys: Enemy[], type: string, gameState: GameState) {
 	if (enemys.length) {
-		if (enemys[0].y > CANVAS_SIZE.height) enemys.shift();
+		if (enemys[0].y > CANVAS_SIZE.height){
+			gameState.score += enemys[0].pointValue;
+			enemys.shift();
+		}
 		enemys.forEach((enemy) => {
 			enemy.moveInY();
-			if (type === "demon"){
+			if (type === "demon") {
 				enemy.moveInX();
 			}
 		});
 	}
 }
 
-// Takes a list of Enemy or Spikes or Blades
-// draw the list items on canvas 
-// check if player is coliding with that object
-export function checkAndDraw(killers: Enemy[] | Spike[] | Blade[], gameState: GameState){
-	for (let i = 0; i < killers.length; ++i) {
-		const killer = killers[i];
-		killer.draw(gameState.gameSpeed);
-		if (gameState.player.isColliding(killer)) {
-			return true;
-		}
-	}
-	return false;
-}
+// // Takes a list of Enemy or Spikes or Blades
+// // draw the list items on canvas
+// // check if player is coliding with that object
+// export function checkAndDraw(
+// 	killers: Enemy[] | Spike[] | Blade[],
+// 	gameState: GameState
+// ) {
+// 	for (let i = 0; i < killers.length; ++i) {
+// 		const killer = killers[i];
+// 		killer.draw(gameState.gameSpeed);
+// 		if (gameState.player.isColliding(killer)) {
+// 			return true;
+// 		}
+// 	}
+// 	return false;
+// }

@@ -5,6 +5,7 @@ import {
 	GAME_MOVEMENT,
 	MAIN_WALL,
 } from "../utils/constants.ts";
+import Sound from "./sound.ts";
 
 export default class Enemy {
 	x: number;
@@ -19,6 +20,11 @@ export default class Enemy {
 	spriteHeight: number;
 	currentFrame: number;
 	totalFrame: number;
+	pointValue: number;
+
+
+	// collision sound 
+	collisionSound: Sound;
 
 	constructor(
 		posx: number,
@@ -34,6 +40,7 @@ export default class Enemy {
 		this.dy = GAME_MOVEMENT;
 		this.w = ENEMY_SIZE.width;
 		this.h = ENEMY_SIZE.height;
+		this.pointValue = 3;
 
 		this.loaded = false;
 		this.img = new Image();
@@ -50,6 +57,10 @@ export default class Enemy {
 
 		this.w = 64;
 		this.h = 64;
+
+
+		// collision sound 
+		this.collisionSound = new Sound("./sounds/obstaclecollision.m4a");
 	}
 
 	draw(gameSpeed: number) {

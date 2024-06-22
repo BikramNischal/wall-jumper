@@ -80,6 +80,8 @@ export type GameState = {
 	demons: Enemy[];
 	spiders: Enemy[];
 	mainWallSpikes: Spike[];
+	score:number;
+	userName: string;
 }
 
 

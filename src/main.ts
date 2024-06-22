@@ -15,6 +15,7 @@ import {
 	generateDemon,
 	generateSpider,
 	generateSpiders,
+	displayScore,
 } from "./generateGameObjects.ts";
 
 import {
@@ -33,6 +34,12 @@ import { prob25 } from "../utils/random.ts";
 // Game Menu and Game Window  references
 const startBtn = document.querySelector(".btn--start") as HTMLButtonElement;
 const restartBtn = document.querySelector(".btn--restart") as HTMLButtonElement;
+const userName = document.querySelector(".user-name") as HTMLInputElement;
+
+let playerName : string ;
+userName.onchange = () =>{
+	playerName = userName.value;
+};
 
 const gameStatus: GameLoop = {
 	pause: false,
@@ -49,12 +56,14 @@ const generateGameState = () => {
 			0,
 			"./images/main-platform.png"
 		),
-		walls: generateWalls(4),
+		walls: generateWalls(3),
 		player: new Player(INITX, INITY, "./images/grab-left.png"),
 		gameSpeed: 0,
 		demons: generateDemons(),
 		spiders: generateSpiders(),
 		mainWallSpikes: generateMainSpikes(),
+		score: 0,
+		userName: "",
 	};
 };
 
@@ -66,6 +75,9 @@ let gameState: GameState = generateGameState();
 
 function Game(gameState: GameState) {
 	ctx.clearRect(0, 0, CANVAS_SIZE.width, CANVAS_SIZE.height);
+
+	displayScore(gameState.score);
+
 	++gameState.gameSpeed;
 
 	//draw main(left most) wall
@@ -78,7 +90,7 @@ function Game(gameState: GameState) {
 	}
 
 	// update enemy list and enemy position 
-	updateEnemys(gameState.demons, "demon");
+	updateEnemys(gameState.demons, "demon", gameState);
 
 	for (let i = 0; i < gameState.demons.length && !gameStatus.restart; ++i) {
 		const demon = gameState.demons[i];
@@ -86,6 +98,7 @@ function Game(gameState: GameState) {
 		//on collision update gameStatus and display restart window and exit game window
 		if (gameState.player.isColliding(demon)) {
 			gameStatus.restart = true;
+			demon.collisionSound.play();
 			displayRestartMenu(gameStatus);
 			return;
 		}
@@ -99,7 +112,7 @@ function Game(gameState: GameState) {
 
 	
 	// update enemy list and move them along game
-	updateEnemys(gameState.spiders, "spider");
+	updateEnemys(gameState.spiders, "spider", gameState);
 
 	// collision detection for spiders
 	for (let i = 0; i < gameState.spiders.length && !gameStatus.restart; ++i) {
@@ -108,6 +121,7 @@ function Game(gameState: GameState) {
 		//on collision update gameStatus and display restart window and exit game window
 		if (gameState.player.isColliding(spider)) {
 			gameStatus.restart = true;
+			spider.collisionSound.play();
 			displayRestartMenu(gameStatus);
 			return;
 		}
@@ -121,6 +135,7 @@ function Game(gameState: GameState) {
 		//on collision update gameStatus and display restart window and exit game window
 		if(gameState.player.isColliding(spike)){
 			gameStatus.restart = true;
+			spike.collisionSound.play();
 			displayRestartMenu(gameStatus);
 			return;
 		}
@@ -129,6 +144,13 @@ function Game(gameState: GameState) {
 	//Player  movement and rendering
 	// move player down with gamespeed
 	gameState.player.moveInY();
+	if(gameState.player.y > CANVAS_SIZE.height){
+		gameStatus.restart = true;
+		gameState.player.fallSound.play();
+		displayRestartMenu(gameStatus);
+		return;
+
+	}
 
 	// check for collision in the main wall
 	gameState.player.collisionWall(gameState.mainWall);
@@ -165,6 +187,7 @@ function Game(gameState: GameState) {
 			//on collision update gameStatus and display restart window and exit game window
 			if(gameState.player.isColliding(wall.spike)){
 				gameStatus.restart = true;
+				wall.spike.collisionSound.play();
 				displayRestartMenu(gameStatus);
 				return;
 			}
@@ -183,15 +206,16 @@ function Game(gameState: GameState) {
 		//on collision update gameStatus and display restart window and exit game window
 		if(gameState.player.isColliding(blade)){
 			gameStatus.restart = true;
+			blade.collisionSound.play();
 			displayRestartMenu(gameStatus);
 			return;
 		}
 	}
 
 	// update walls, blades and spikes
-	updateBlades(gameState.blades);
-	updateWalls(gameState.walls);
-	updateMainSpikes(gameState.mainWallSpikes);
+	updateBlades(gameState.blades,gameState);
+	updateWalls(gameState.walls,gameState);
+	updateMainSpikes(gameState.mainWallSpikes, gameState);
 
 	if (gameStatus.pause) return;
 
@@ -202,6 +226,7 @@ function gameLoop() {
 	
 	//display and start game window
 	startBtn.onclick = () => {
+		gameState.userName = playerName;
 		gameStatus.clickState = false;
 		displayGame(gameStatus);
 		gameState.mainWall.setMainWall();
@@ -214,6 +239,7 @@ function gameLoop() {
 		gameStatus.restart = false;
 		displayGame(gameStatus);
 		gameState = generateGameState();
+		gameState.userName = playerName;
 		gameState.mainWall.setMainWall();
 		Game(gameState);
 	};
@@ -224,6 +250,11 @@ function gameLoop() {
 			ctx.clearRect(0, 0, CANVAS_SIZE.width, CANVAS_SIZE.height);
 			if (gameState.player.jumpCount > 0) {
 				gameState.player.isJumping = true;
+				if(gameState.player.jumpCount === 2){
+					gameState.player.jumpSound.play();
+				} else{
+					gameState.player.airJumpSound.play();
+				}
 				gameState.player.resetJump();
 				--gameState.player.jumpCount;
 			}
