@@ -30,6 +30,7 @@ export default class Wall {
 	loaded: boolean;
 	spike: Spike | null;
 	effect : Effect | null;	
+	effectUsed: boolean;
 
 	constructor(posx: number, posy: number, type: number, imgsrc: string) {
 		this.x = posx;
@@ -49,7 +50,7 @@ export default class Wall {
 		};
 
 		this.effect= null;
-
+		this.effectUsed = false;
 	}
 
 	updateImage(imgsrc: string) {

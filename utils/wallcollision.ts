@@ -26,7 +26,7 @@ export function normalCollision(player: Player, wall: Wall) {
 				player.img.src = "./images/grab-right.png";
 				
 				// for ice wall effect setup
-				if(wall.type === 3){
+				if(wall.type === 3 && !wall.effectUsed){
 					const effect = new Effect(player.x,player.y,"./images/icecloud-right.png");
 					wall.effect = effect;
 				}
@@ -39,7 +39,7 @@ export function normalCollision(player: Player, wall: Wall) {
 				player.img.src = "./images/grab-left.png";
 				
 				//for ice wall effect setup
-				if(wall.type === 3){
+				if(wall.type === 3 && !wall.effectUsed){
 					const effect = new Effect(player.x, player.y,"./images/icecloud-left.png");
 					wall.effect = effect;
 				}

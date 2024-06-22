@@ -11,7 +11,7 @@ export function displayGame(gameStatus: GameLoop) {
 	canvas.style.display = "block";
 	const clickguard = setTimeout(() => {
 		gameStatus.clickState = true;
-        clearInterval(clickguard);
+        clearTimeout(clickguard);
 	}, 10);
 }
 
@@ -20,7 +20,7 @@ export function displayRestartMenu(gameStatus:GameLoop) {
 	canvas.style.display = "none";
 	const clickguard = setTimeout(() => {
 		gameStatus.clickState = true;
-        clearInterval(clickguard);
+        clearTimeout(clickguard);
 	}, 10);
 }
 

@@ -149,8 +149,15 @@ function Game(gameState: GameState) {
 		wall.moveInY();
 		wall.draw();
 
-		if(wall.effect){
+		if(wall.effect && !wall.effectUsed){
 			wall.effect.draw();
+			gameStatus.clickState = false;
+			const effectDuration = setTimeout(()=>{
+				wall.effect= null;
+				wall.effectUsed = true;
+				gameStatus.clickState = true;
+				clearTimeout(effectDuration);
+			}, 2000)
 		}
 
 		if(wall.spike){
@@ -208,7 +215,6 @@ function gameLoop() {
 		displayGame(gameStatus);
 		gameState = generateGameState();
 		gameState.mainWall.setMainWall();
-		console.log(gameState);
 		Game(gameState);
 	};
 
