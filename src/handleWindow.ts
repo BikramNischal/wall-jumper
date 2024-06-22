@@ -5,21 +5,22 @@ import { GameLoop } from "../utils/constants";
 const mainMenu = document.querySelector(".start-menu") as HTMLDivElement;
 const restartMenu = document.querySelector(".restart-menu") as HTMLDivElement;
 
-export function displayGame(gameloop: GameLoop) {
+export function displayGame(gameStatus: GameLoop) {
 	mainMenu.style.display = "none";
 	restartMenu.style.display = "none";
 	canvas.style.display = "block";
 	const clickguard = setTimeout(() => {
-		gameloop.start = true;
+		gameStatus.clickState = true;
         clearInterval(clickguard);
-	}, 100);
+	}, 10);
 }
 
-export function displayRestartMenu(gameloop:GameLoop) {
+export function displayRestartMenu(gameStatus:GameLoop) {
 	restartMenu.style.display = "flex";
 	canvas.style.display = "none";
 	const clickguard = setTimeout(() => {
-		gameloop.start = true;
+		gameStatus.clickState = true;
         clearInterval(clickguard);
-	}, 100);
+	}, 10);
 }
+

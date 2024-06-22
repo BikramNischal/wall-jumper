@@ -1,8 +1,16 @@
-import { GAME_MOVEMENT, PLAYERDX, PLAYERDY } from "../utils/constants";
+import {
+	CANVAS_SIZE,
+	GAME_MOVEMENT,
+	PLAYERDX,
+	PLAYERDY,
+} from "../utils/constants";
 import { ctx } from "./canvas";
 import Obstacle from "./obstacle";
 import Wall from "./wall";
-import { normalCollision, rubberCollision } from "../utils/wallcollision.ts";
+import {
+	normalCollision,
+	rubberCollision,
+} from "../utils/wallcollision.ts";
 
 export default class Player {
 	x: number;
@@ -45,15 +53,15 @@ export default class Player {
 		this.img.src = imgsrc;
 
 		this.img.onload = () => {
-			this.loaded= true;
+			this.loaded = true;
 			this.draw();
-		}	 
+		};
 
 		// for airjump sprites
 		this.spriteHeight = 67;
 		this.spriteWidth = 64;
 		this.currentFrame = 0;
-		this.totalFrame = 8;			
+		this.totalFrame = 8;
 	}
 
 	draw() {
@@ -129,6 +137,8 @@ export default class Player {
 		if (this.dy > -PLAYERDY) {
 			this.dy = -PLAYERDY;
 		}
+
+		if (this.x + this.w > CANVAS_SIZE.width) rubberCollision(this);
 	}
 
 	isColliding(object: Wall | Obstacle) {

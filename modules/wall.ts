@@ -8,6 +8,7 @@ import {
 import random, {prob10, prob25} from "../utils/random.ts";
 import Spike from "./spike.ts";
 import { generateRandomSpike } from "../src/generateGameObjects.ts";
+import Effect from "./effect.ts";
 
 /*
 Wall types 
@@ -28,6 +29,7 @@ export default class Wall {
 	type: number;
 	loaded: boolean;
 	spike: Spike | null;
+	effect : Effect | null;	
 
 	constructor(posx: number, posy: number, type: number, imgsrc: string) {
 		this.x = posx;
@@ -45,6 +47,9 @@ export default class Wall {
 			this.loaded = true;
 			this.draw();
 		};
+
+		this.effect= null;
+
 	}
 
 	updateImage(imgsrc: string) {

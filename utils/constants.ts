@@ -63,9 +63,12 @@ const BLADE_RANGE = 100;
 export type Direction = "horizontal" | "vertical";
 export type obstacleFace = "right" | "left"
 
+
+// stores the status of gameloop
 export type GameLoop = {
 	pause:boolean;
-	start:boolean;
+	clickState:boolean;
+	restart:boolean;
 }
 
 export type GameState = {
