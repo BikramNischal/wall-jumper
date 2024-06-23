@@ -6,6 +6,7 @@ import {
 	INITY,
 	MAIN_WALL,
 	GameLoop,
+	GAME_MOVEMENT,
 } from "../utils/constants.ts";
 import {
 	generateWalls,
@@ -45,6 +46,7 @@ const gameStatus: GameLoop = {
 	pause: false,
 	clickState: false,
 	restart: false,
+	gameMovement: GAME_MOVEMENT
 };
 
 const generateGameState = () => {
@@ -67,9 +69,6 @@ const generateGameState = () => {
 	};
 };
 
-// ================== Testing area =======================
-
-// ======================================================
 
 let gameState: GameState = generateGameState();
 
@@ -77,8 +76,8 @@ function Game(gameState: GameState) {
 	ctx.clearRect(0, 0, CANVAS_SIZE.width, CANVAS_SIZE.height);
 
 	displayScore(gameState.score);
-
 	++gameState.gameSpeed;
+	gameStatus.gameMovement = GAME_MOVEMENT + (gameState.score/10)*0.5;
 
 	//draw main(left most) wall
 	gameState.mainWall.draw();
@@ -90,7 +89,7 @@ function Game(gameState: GameState) {
 	}
 
 	// update enemy list and enemy position 
-	updateEnemys(gameState.demons, "demon", gameState);
+	updateEnemys(gameState.demons, "demon", gameState,gameStatus.gameMovement);
 
 	for (let i = 0; i < gameState.demons.length && !gameStatus.restart; ++i) {
 		const demon = gameState.demons[i];
@@ -112,7 +111,7 @@ function Game(gameState: GameState) {
 
 	
 	// update enemy list and move them along game
-	updateEnemys(gameState.spiders, "spider", gameState);
+	updateEnemys(gameState.spiders, "spider", gameState,gameStatus.gameMovement);
 
 	// collision detection for spiders
 	for (let i = 0; i < gameState.spiders.length && !gameStatus.restart; ++i) {
@@ -130,7 +129,7 @@ function Game(gameState: GameState) {
 	// collision detection for spikes on the left wall
 	for(let i =0; i< gameState.mainWallSpikes.length && !gameStatus.restart; ++i){
 		const spike = gameState.mainWallSpikes[i];
-		spike.moveInY();
+		spike.moveInY(gameStatus.gameMovement);
 		spike.draw();
 		//on collision update gameStatus and display restart window and exit game window
 		if(gameState.player.isColliding(spike)){
@@ -143,13 +142,12 @@ function Game(gameState: GameState) {
 
 	//Player  movement and rendering
 	// move player down with gamespeed
-	gameState.player.moveInY();
+	gameState.player.moveInY(gameStatus.gameMovement);
 	if(gameState.player.y > CANVAS_SIZE.height){
 		gameStatus.restart = true;
 		gameState.player.fallSound.play();
 		displayRestartMenu(gameStatus, gameState);
 		return;
-
 	}
 
 	// check for collision in the main wall
@@ -168,7 +166,7 @@ function Game(gameState: GameState) {
 	// update wall position and check collision
 	for(let i =0; i < gameState.walls.length && !gameStatus.restart; ++i){
 		const wall = gameState.walls[i];
-		wall.moveInY();
+		wall.moveInY(gameStatus.gameMovement);
 		wall.draw();
 
 		if(wall.effect && !wall.effectUsed){
@@ -199,7 +197,7 @@ function Game(gameState: GameState) {
 	//move blades down and check collision
 	for(let i = 0; i< gameState.blades.length; ++i){
 		const blade = gameState.blades[i];
-		blade.moveInY();
+		blade.moveInY(gameStatus.gameMovement);
 		blade.draw();
 		blade.oscillate();
 
@@ -238,6 +236,7 @@ function gameLoop() {
 	restartBtn.onclick = () => {
 		gameStatus.clickState = false;
 		gameStatus.restart = false;
+		gameStatus.gameMovement = GAME_MOVEMENT;
 		displayGame(gameStatus);
 
 		gameState = generateGameState();
@@ -257,7 +256,7 @@ function gameLoop() {
 				gameState.player.isJumping = true;
 				if(gameState.player.jumpCount === 2){
 					gameState.player.jumpSound.play();
-				} else{
+				} else {
 					gameState.player.airJumpSound.play();
 				}
 				gameState.player.resetJump();

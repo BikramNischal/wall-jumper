@@ -99,8 +99,8 @@ export default class Enemy {
 			this.currentFrame = (this.currentFrame+1)%this.totalFrame;
 	}
 
-	moveInY() {
-		this.y += this.dy ;
+	moveInY(gameSpeed:number) {
+		this.y +=  gameSpeed;
 	}
 
 	changeDirection() {

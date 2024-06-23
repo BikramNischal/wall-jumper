@@ -88,10 +88,10 @@ export default class Wall {
 	}
 
 	//move wall down with GAME_MOVEMENT speed
-	moveInY() {
-		this.y += GAME_MOVEMENT;
+	moveInY(gameSpeed: number) {
+		this.y += gameSpeed;
 		if(this.spike)
-			this.spike.y += GAME_MOVEMENT;
+			this.spike.moveInY(gameSpeed);
 	}
 
 	// move walls downward with game movement

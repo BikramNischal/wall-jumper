@@ -1,6 +1,5 @@
 import {
 	CANVAS_SIZE,
-	GAME_MOVEMENT,
 	PLAYERDX,
 	PLAYERDY,
 } from "../utils/constants";
@@ -183,8 +182,8 @@ export default class Player {
 	}
 
 	// move player downwards with game speed
-	moveInY() {
-		this.y += GAME_MOVEMENT;
+	moveInY(gamespeed: number) {
+		this.y += gamespeed;
 		if (this.x + this.w > CANVAS_SIZE.width) rubberCollision(this);
 	}
 }

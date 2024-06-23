@@ -45,7 +45,7 @@ export function displayGame(gameStatus: GameLoop) {
 }
 
 export function displayRestartMenu(gameStatus:GameLoop, gameState: GameState) {
-	
+	gameState.player.jumpCount = 0;	
 	const leaderBoard = getLeaderBoard();
 	const newScore = {
 		name: gameState.userName,

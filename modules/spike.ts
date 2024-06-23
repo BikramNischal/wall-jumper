@@ -1,6 +1,6 @@
 import { ctx } from "./canvas.ts";
 import Obstacle from "./obstacle.ts";
-import { GAME_MOVEMENT, obstacleFace } from "../utils/constants.ts";
+import {obstacleFace } from "../utils/constants.ts";
 import { prob50 } from "../utils/random.ts";
 
 export default class Spike extends Obstacle {
@@ -43,8 +43,8 @@ export default class Spike extends Obstacle {
 		}
 	}
 
-	moveInY() {
-		this.y += GAME_MOVEMENT;
+	moveInY(gameSpeed:number) {
+		this.y += gameSpeed;
 	}
 
 }

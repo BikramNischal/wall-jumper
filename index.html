@@ -22,13 +22,9 @@
 	<body>
 		<div class="game-window">
 			<div class="pause-window">
-				<p class="pause-text">
-					PAUSE
-				</p>
+				<p class="pause-text">PAUSE</p>
 
-				<p class="resume-text">
-					Press "Space" to resume.
-				</p>
+				<p class="resume-text">Press "Space" to resume.</p>
 			</div>
 			<div class="start-menu menu">
 				<p class="game-title">
@@ -41,6 +37,13 @@
 					alt="monkey jumping"
 					class="character"
 				/> -->
+				<ul class="controls">
+					<li class="controls-title">Controls and instructions</li>
+					<li class="controls--text">Click to jump</li>
+					<li class="controls--text">Click in air to backflip(you can backflip only once)</li>
+					<li class="controls--text">Rubber Wall bounces you back</li>
+					<li class="controls--text">Ice Wall causes you to freeze for 2S</li>	
+				</ul>
 				<div class="input-start">
 					<input
 						type="text"
@@ -49,14 +52,15 @@
 						maxlength="12"
 						placeholder="Enter Name : Max"
 					/>
-					<button class="btn btn--start" type="submit">Start Game</button>
+					<button class="btn btn--start" type="submit">
+						Start Game
+					</button>
 				</div>
 			</div>
 			<canvas class="canvas"> </canvas>
 			<div class="restart-menu menu">
 				<p class="game-over">GAME OVER</p>
-				<div class="leaderboard">
-				</div>
+				<div class="leaderboard"></div>
 				<p class="score"></p>
 				<button class="btn btn--restart">Re-Start Game</button>
 			</div>

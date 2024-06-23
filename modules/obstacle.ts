@@ -1,5 +1,5 @@
 import { ctx } from "./canvas.ts";
-import { GAME_MOVEMENT, Direction } from "../utils/constants.ts";
+import { Direction } from "../utils/constants.ts";
 import Sound from "./sound.ts";
 
 export default class Obstacle {
@@ -41,8 +41,8 @@ export default class Obstacle {
 
 
 	//update the obstacle position according to the game flow
-	moveInY() {
-		this.y += GAME_MOVEMENT;
+	moveInY(gameSpeed: number) {
+		this.y += gameSpeed;
 	}
 }
 

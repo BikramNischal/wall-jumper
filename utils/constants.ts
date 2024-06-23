@@ -69,10 +69,7 @@ export type GameLoop = {
 	pause:boolean;
 	clickState:boolean;
 	restart:boolean;
-}
-
-export type LeaderBoard = {
-	[name:string]: number;
+	gameMovement: number;
 }
 
 export type Score = {

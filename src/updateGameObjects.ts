@@ -75,34 +75,17 @@ export function updateMainSpikes(spikes: Spike[], gameState: GameState) {
 }
 
 //update enemy list
-export function updateEnemys(enemys: Enemy[], type: string, gameState: GameState) {
+export function updateEnemys(enemys: Enemy[], type: string, gameState: GameState, gameSpeed:number) {
 	if (enemys.length) {
 		if (enemys[0].y > CANVAS_SIZE.height){
 			gameState.score += enemys[0].pointValue;
 			enemys.shift();
 		}
 		enemys.forEach((enemy) => {
-			enemy.moveInY();
+			enemy.moveInY(gameSpeed);
 			if (type === "demon") {
 				enemy.moveInX();
 			}
 		});
 	}
 }
-
-// // Takes a list of Enemy or Spikes or Blades
-// // draw the list items on canvas
-// // check if player is coliding with that object
-// export function checkAndDraw(
-// 	killers: Enemy[] | Spike[] | Blade[],
-// 	gameState: GameState
-// ) {
-// 	for (let i = 0; i < killers.length; ++i) {
-// 		const killer = killers[i];
-// 		killer.draw(gameState.gameSpeed);
-// 		if (gameState.player.isColliding(killer)) {
-// 			return true;
-// 		}
-// 	}
-// 	return false;
-// }

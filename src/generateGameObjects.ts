@@ -81,7 +81,7 @@ export function generateBlade() {
 // takes number of obstacle to generate i.e num
 export function generateBlades(num: number) {
 	//Gap between blades
-	const bladeGap = CANVAS_SIZE.height / (num + 1);
+	const bladeGap = CANVAS_SIZE.height/2;
 
 	const blades: Blade[] = [];
 	for (let i = 0; i < num; ++i) {
@@ -114,7 +114,7 @@ export function generateRandomSpike() {
 //generate spikes for main wall on the left
 export function generateMainSpikes() {
 	const spikeGap = SPIKE_SIZE.height * 10;
-	const spikeNum = random(4);
+	const spikeNum = random(3);
 	const spikes: Spike[] = [];
 	for (let i = 0; i < spikeNum; ++i) {
 		let y = 0;
