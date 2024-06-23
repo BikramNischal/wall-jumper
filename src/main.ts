@@ -25,7 +25,7 @@ import {
 	updateMainSpikes,
 } from "./updateGameObjects.ts";
 
-import { displayGame, displayRestartMenu } from "./handleWindow.ts";
+import { displayGame, displayPause, displayRestartMenu, hidePause } from "./handleWindow.ts";
 
 import Player from "../modules/player.ts";
 import Wall from "../modules/wall.ts";
@@ -270,8 +270,12 @@ function gameLoop() {
 		//pause game on SPACE press
 		if (event.key === " " && gameStatus.pause) {
 			gameStatus.pause = false;
+			hidePause();
 			Game(gameState);
-		} else if (event.key === " ") gameStatus.pause = true;
+		} else if (event.key === " "){
+			gameStatus.pause = true;
+			displayPause();
+		}
 	});
 
 }

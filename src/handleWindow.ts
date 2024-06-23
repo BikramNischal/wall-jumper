@@ -5,6 +5,8 @@ import {getLeaderBoard, updateLeaderBoard, updateScore} from "./handleLeaderBoar
 //game menu references
 const mainMenu = document.querySelector(".start-menu") as HTMLDivElement;
 const restartMenu = document.querySelector(".restart-menu") as HTMLDivElement;
+const pauseWindow = document.querySelector(".pause-window") as HTMLDivElement;
+
 const score = document.querySelector(".score") as HTMLParagraphElement;
 const leaderBoardTable = document.querySelector(".leaderboard") as HTMLDivElement;
 
@@ -63,5 +65,14 @@ export function displayRestartMenu(gameStatus:GameLoop, gameState: GameState) {
 		gameStatus.clickState = true;
         clearTimeout(clickguard);
 	}, 10);
+}
+
+
+export function displayPause(){
+	pauseWindow.style.display= "flex";
+}
+
+export function hidePause(){
+	pauseWindow.style.display = "none";
 }
 

@@ -21,6 +21,30 @@ body{
   background-color: white;
 }
 
+.pause-window{
+  position: absolute;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content:center; 
+  gap: 100px;
+  width: 100%;
+  height: 99vh;
+  background-color: rgba(255,255,255,0.7);
+  font-family: "Offside", sans-serif;
+  
+}
+
+.pause-text{
+  font-size: 64px;
+  color: red;
+}
+
+.resume-text{
+  font-size: 32px;
+  color:#9BCE19;
+}
+
 .canvas{
   display: none;
   width: 100%;
@@ -81,6 +105,7 @@ body{
   width: 100%;
   min-height: 30px;
   border-radius: 15px;
+  border: none;
 }
 
 
