@@ -105,3 +105,45 @@ body{
   display: none;
 }
 
+.score {
+  font-size : 32px;
+  font-family: "Offside", sans-serif;
+  background-image: linear-gradient(to right, red, purple);
+  background-clip: text;
+  color:transparent;
+}
+
+.leaderboard{
+  width: 70%;
+  max-height: 150px;
+  overflow-y: scroll;
+  padding: 5px;
+  background-color: rgba(255,255,255,0.5);
+  /* hide scroll bar */
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* hide scroll bar */
+.leaderboard::-webkit-scrollbar{
+  display: none;
+}
+
+
+.leaderboard-row{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.leaderboard-entry{
+  font-size: 24px;
+  font-family: "Nova Slim", sans-serif;
+  font-weight: bold;
+  width: 50%;
+  text-align: center;
+}
+
+
+

@@ -71,6 +71,10 @@ export type GameLoop = {
 	restart:boolean;
 }
 
+export type LeaderBoard = {
+	[name:string]: number;
+}
+
 export type GameState = {
 	blades:Blade[];
 	mainWall: Wall;

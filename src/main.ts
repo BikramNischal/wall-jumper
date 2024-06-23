@@ -63,7 +63,7 @@ const generateGameState = () => {
 		spiders: generateSpiders(),
 		mainWallSpikes: generateMainSpikes(),
 		score: 0,
-		userName: "",
+		userName: "Unknown",
 	};
 };
 
@@ -99,7 +99,7 @@ function Game(gameState: GameState) {
 		if (gameState.player.isColliding(demon)) {
 			gameStatus.restart = true;
 			demon.collisionSound.play();
-			displayRestartMenu(gameStatus);
+			displayRestartMenu(gameStatus, gameState);
 			return;
 		}
 	}
@@ -122,7 +122,7 @@ function Game(gameState: GameState) {
 		if (gameState.player.isColliding(spider)) {
 			gameStatus.restart = true;
 			spider.collisionSound.play();
-			displayRestartMenu(gameStatus);
+			displayRestartMenu(gameStatus,gameState);
 			return;
 		}
 	}
@@ -136,7 +136,7 @@ function Game(gameState: GameState) {
 		if(gameState.player.isColliding(spike)){
 			gameStatus.restart = true;
 			spike.collisionSound.play();
-			displayRestartMenu(gameStatus);
+			displayRestartMenu(gameStatus,gameState);
 			return;
 		}
 	}
@@ -147,7 +147,7 @@ function Game(gameState: GameState) {
 	if(gameState.player.y > CANVAS_SIZE.height){
 		gameStatus.restart = true;
 		gameState.player.fallSound.play();
-		displayRestartMenu(gameStatus);
+		displayRestartMenu(gameStatus, gameState);
 		return;
 
 	}
@@ -188,7 +188,7 @@ function Game(gameState: GameState) {
 			if(gameState.player.isColliding(wall.spike)){
 				gameStatus.restart = true;
 				wall.spike.collisionSound.play();
-				displayRestartMenu(gameStatus);
+				displayRestartMenu(gameStatus,gameState);
 				return;
 			}
 		}
@@ -207,7 +207,7 @@ function Game(gameState: GameState) {
 		if(gameState.player.isColliding(blade)){
 			gameStatus.restart = true;
 			blade.collisionSound.play();
-			displayRestartMenu(gameStatus);
+			displayRestartMenu(gameStatus, gameState);
 			return;
 		}
 	}
@@ -226,7 +226,8 @@ function gameLoop() {
 	
 	//display and start game window
 	startBtn.onclick = () => {
-		gameState.userName = playerName;
+		if(playerName)
+			gameState.userName = playerName;
 		gameStatus.clickState = false;
 		displayGame(gameStatus);
 		gameState.mainWall.setMainWall();
@@ -238,9 +239,13 @@ function gameLoop() {
 		gameStatus.clickState = false;
 		gameStatus.restart = false;
 		displayGame(gameStatus);
+
 		gameState = generateGameState();
-		gameState.userName = playerName;
+
+		if(playerName)
+			gameState.userName = playerName;
 		gameState.mainWall.setMainWall();
+
 		Game(gameState);
 	};
 
