@@ -10,15 +10,15 @@
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link
-			href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+			href="https://fonts.googleapis.com/css2?family=Offside&display=swap"
 			rel="stylesheet"
 		/>
 		<link
-			href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap"
+			href="https://fonts.googleapis.com/css2?family=Nova+Slim&display=swap"
 			rel="stylesheet"
 		/>
-		<script type="module" crossorigin src="/wall-jumper/assets/index-zaG2DPAc.js"></script>
-		<link rel="stylesheet" crossorigin href="/wall-jumper/assets/index-9wwBxJb_.css">
+		<script type="module" crossorigin src="/wall-jumper/assets/index-DzOtwqRB.js"></script>
+		<link rel="stylesheet" crossorigin href="/wall-jumper/assets/index-627nDPbE.css">
 	</head>
 	<body>
 		<div class="game-window">
@@ -33,14 +33,24 @@
 					alt="monkey jumping"
 					class="character"
 				/> -->
-				<button class="btn btn--start">Start Game</button>
+				<div class="input-start">
+					<input
+						type="text"
+						class="user-name"
+						minlength="3"
+						maxlength="12"
+						placeholder="Enter Name : Max"
+					/>
+					<button class="btn btn--start" type="submit">Start Game</button>
+				</div>
 			</div>
 			<canvas class="canvas"> </canvas>
 			<div class="restart-menu menu">
-        <p class="game-over">
-          GAME OVER
-        </p>
-				<button class="btn btn--restart">Re:Start Game</button>
+				<p class="game-over">GAME OVER</p>
+				<div class="leaderboard">
+				</div>
+				<p class="score"></p>
+				<button class="btn btn--restart">Re-Start Game</button>
 			</div>
 		</div>
 	</body>
