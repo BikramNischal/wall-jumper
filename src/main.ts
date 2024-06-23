@@ -271,7 +271,7 @@ function gameLoop() {
 			gameStatus.pause = false;
 			hidePause();
 			Game(gameState);
-		} else if (event.key === " "){
+		} else if (event.key === " " && !gameStatus.restart){
 			gameStatus.pause = true;
 			displayPause();
 		}
