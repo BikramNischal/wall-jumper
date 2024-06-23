@@ -12,8 +12,10 @@ import {
 } from "../utils/constants.ts";
 import { calcx, getWallXPos } from "../utils/generatePosition.ts";
 import random, { prob50, randomRange } from "../utils/random.ts";
-import Enemy from "../modules/enemy.ts";
+// import Enemy from "../modules/enemy.ts";
+import Demon from "../modules/demon.ts";
 import Spike from "../modules/spike.ts";
+import Spider from "../modules/spider.ts";
 import { ctx } from "../modules/canvas.ts";
 
 //generate a wall
@@ -132,12 +134,12 @@ export function generateMainSpikes() {
 // generate demon at random x position
 export function generateDemon() {
 	const x = calcx();
-	return new Enemy(x, 0, "./images/demon-left.png", 79, 69, 4);
+	return new Demon(x, 0, "./images/demon-left.png", 79, 69, 4);
 }
 
 //generate list of demons
 export function generateDemons() {
-	const demons: Enemy[] = [];
+	const demons: Demon[] = [];
 	return demons;
 }
 
@@ -160,14 +162,14 @@ export function generateSpider() {
 			break;
 	}
 	const x = MAIN_WALL.x + MAIN_WALL.width - MAIN_WALL.xOffSet * 2;
-	const spider =  new Enemy(x, 0, imgsrc, 49, 80.3, 3);
+	const spider =  new Spider(x, 0, imgsrc, 49, 80.3, 3);
 	spider.dy = GAME_MOVEMENT_OFFSET;
 	return spider;
 }
 
 //generate list of spiders
 export function generateSpiders() {
-	const spiders: Enemy[] = [];
+	const spiders: Spider[] = [];
 	return spiders;
 }
 

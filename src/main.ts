@@ -22,8 +22,9 @@ import {
 import {
 	updateWalls,
 	updateBlades,
-	updateEnemys,
+	updateSider,
 	updateMainSpikes,
+	updateDemons,
 } from "./updateGameObjects.ts";
 
 import { displayGame, displayPause, displayRestartMenu, hidePause } from "./handleWindow.ts";
@@ -82,14 +83,14 @@ function Game(gameState: GameState) {
 	//draw main(left most) wall
 	gameState.mainWall.draw();
 
-	// random enemy generation according to game speed
+	// random demon generation according to game speed
 	if (gameState.gameSpeed % 500 === 0) {
 		const makeEnemy = prob25();
 		if (makeEnemy) gameState.demons.push(generateDemon());
 	}
 
-	// update enemy list and enemy position 
-	updateEnemys(gameState.demons, "demon", gameState,gameStatus.gameMovement);
+	// update demons list and demon position 
+	updateDemons(gameState.demons, gameState,gameStatus.gameMovement);
 
 	for (let i = 0; i < gameState.demons.length && !gameStatus.restart; ++i) {
 		const demon = gameState.demons[i];
@@ -110,13 +111,13 @@ function Game(gameState: GameState) {
 	}
 
 	
-	// update enemy list and move them along game
-	updateEnemys(gameState.spiders, "spider", gameState,gameStatus.gameMovement);
+	// update spider list and move them along game
+	updateSider(gameState.spiders, gameState,gameStatus.gameMovement);
 
 	// collision detection for spiders
 	for (let i = 0; i < gameState.spiders.length && !gameStatus.restart; ++i) {
 		const spider = gameState.spiders[i];
-		spider.drawVertical(gameState.gameSpeed);
+		spider.draw(gameState.gameSpeed);
 		//on collision update gameStatus and display restart window and exit game window
 		if (gameState.player.isColliding(spider)) {
 			gameStatus.restart = true;

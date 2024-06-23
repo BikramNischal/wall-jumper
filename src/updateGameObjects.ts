@@ -1,14 +1,15 @@
 import Wall, { randomWallHeight } from "../modules/wall.ts";
 import Blade from "../modules/blade.ts";
 import Spike from "../modules/spike.ts";
-import Enemy from "../modules/enemy.ts";
+import Demon from "../modules/demon.ts";
+import Spider from "../modules/spider.ts";
 
 import {
 	generateWall,
 	generateBlades,
 	generateMainSpikes,
 } from "./generateGameObjects.ts";
-import { WALL, CANVAS_SIZE, GameState } from "../utils/constants.ts";
+import { WALL, CANVAS_SIZE, GameState} from "../utils/constants.ts";
 import random from "../utils/random.ts";
 
 // update walls list
@@ -74,18 +75,45 @@ export function updateMainSpikes(spikes: Spike[], gameState: GameState) {
 	}
 }
 
-//update enemy list
-export function updateEnemys(enemys: Enemy[], type: string, gameState: GameState, gameSpeed:number) {
-	if (enemys.length) {
-		if (enemys[0].y > CANVAS_SIZE.height){
-			gameState.score += enemys[0].pointValue;
-			enemys.shift();
+// //update enemy list
+// export function updateEnemys(enemys: Enemy[], type: string, gameState: GameState, gameSpeed:number) {
+// 	if (enemys.length) {
+// 		if (enemys[0].y > CANVAS_SIZE.height){
+// 			gameState.score += enemys[0].pointValue;
+// 			enemys.shift();
+// 		}
+// 		enemys.forEach((enemy) => {
+// 			enemy.moveInY(gameSpeed);
+// 			if (type === "demon") {
+// 				enemy.moveInX();
+// 			}
+// 		});
+// 	}
+// // }
+
+export function updateDemons(demons: Demon[],gameState:GameState, gameSpeed: number){
+	if(demons.length){
+		if(demons[0].y > CANVAS_SIZE.height){
+			gameState.score += demons[0].pointValue;
+			demons.shift();
 		}
-		enemys.forEach((enemy) => {
-			enemy.moveInY(gameSpeed);
-			if (type === "demon") {
-				enemy.moveInX();
-			}
-		});
+
+		demons.forEach((demon) =>{
+			demon.moveInY(gameSpeed);
+			demon.moveInX();
+		})
+	}
+}
+
+export function updateSider(spiders: Spider[], gameState:GameState, gameSpeed: number){
+	if(spiders.length){
+		if(spiders[0].y > CANVAS_SIZE.height){
+			gameState.score += spiders[0].pointValue;
+			spiders.shift();
+		}
+
+		spiders.forEach((spider) => {
+			spider.moveInY(gameSpeed);
+		})
 	}
 }

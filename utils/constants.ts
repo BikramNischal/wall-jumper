@@ -2,7 +2,8 @@ import { canvas } from "../modules/canvas";
 import Blade from "../modules/blade.ts";
 import Wall from "../modules/wall.ts";
 import Player from "../modules/player.ts";
-import Enemy from "../modules/enemy.ts";
+import Demon from "../modules/demon.ts";
+import Spider from "../modules/spider.ts";
 import Spike from "../modules/spike.ts";
 
 const GAME_MOVEMENT = 2;
@@ -83,8 +84,8 @@ export type GameState = {
 	walls: Wall[];
 	player: Player;
 	gameSpeed: number;
-	demons: Enemy[];
-	spiders: Enemy[];
+	demons: Demon[];
+	spiders: Spider[];
 	mainWallSpikes: Spike[];
 	score:number;
 	userName: string;
