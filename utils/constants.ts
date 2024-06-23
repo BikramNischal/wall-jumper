@@ -75,6 +75,11 @@ export type LeaderBoard = {
 	[name:string]: number;
 }
 
+export type Score = {
+	name:string;
+	value:number;
+}
+
 export type GameState = {
 	blades:Blade[];
 	mainWall: Wall;

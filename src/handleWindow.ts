@@ -1,6 +1,6 @@
 import { canvas } from "../modules/canvas";
-import { GameLoop, GameState, LeaderBoard } from "../utils/constants";
-import {getLeaderBoard, updateLeaderBoard} from "./handleLeaderBoard.ts";
+import { GameLoop, GameState, Score } from "../utils/constants";
+import {getLeaderBoard, updateLeaderBoard, updateScore} from "./handleLeaderBoard.ts";
 
 //game menu references
 const mainMenu = document.querySelector(".start-menu") as HTMLDivElement;
@@ -8,9 +8,9 @@ const restartMenu = document.querySelector(".restart-menu") as HTMLDivElement;
 const score = document.querySelector(".score") as HTMLParagraphElement;
 const leaderBoardTable = document.querySelector(".leaderboard") as HTMLDivElement;
 
-export function createLeaderBoardEntry(leaderBoard:LeaderBoard){
+export function createLeaderBoardEntry(leaderBoard:Score[]){
 	leaderBoardTable.innerHTML = "";
-	for(const player in leaderBoard){
+	for(const player of leaderBoard){
 		// create score display elements 
 		const leaderBoardRow = document.createElement("p");
 		const playerName = document.createElement("span");
@@ -22,8 +22,8 @@ export function createLeaderBoardEntry(leaderBoard:LeaderBoard){
 		score.classList.add("leaderboard-entry");
 
 		//assign display value i.e user name and score
-		playerName.innerHTML = player;
-		score.innerHTML = leaderBoard[player].toString();
+		playerName.innerHTML = player.name;
+		score.innerHTML = player.value.toString();
 
 		// add elements to DOM
 		leaderBoardRow.appendChild(playerName);
@@ -43,19 +43,18 @@ export function displayGame(gameStatus: GameLoop) {
 }
 
 export function displayRestartMenu(gameStatus:GameLoop, gameState: GameState) {
+	
+	const leaderBoard = getLeaderBoard();
+	const newScore = {
+		name: gameState.userName,
+		value: gameState.score
+	}
+	updateScore(newScore, leaderBoard);
+	leaderBoard.sort((firstScore, secondScore)=> secondScore.value - firstScore.value);
 
-	// update leader board 
-	let leaderBoard: LeaderBoard = getLeaderBoard();
-	if(leaderBoard[gameState.userName] && leaderBoard[gameState.userName] < gameState.score){
-		leaderBoard[gameState.userName]	 = gameState.score;
-	} else if(leaderBoard[gameState.userName]){
-		console.log("You didn't bit you high score");
-	} else{
-		leaderBoard[gameState.userName] = gameState.score;
-	}	
-	updateLeaderBoard(leaderBoard);
-
+	updateLeaderBoard(leaderBoard);	
 	createLeaderBoardEntry(leaderBoard);
+
 
 	restartMenu.style.display = "flex";
 	score.innerHTML = `${gameState.userName} : ${gameState.score}`;
