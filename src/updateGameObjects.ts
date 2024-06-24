@@ -19,7 +19,6 @@ export function updateWalls(gameState: GameState) {
 		const prevWall = gameState.walls[gameState.walls.length - 1];
 
 		if(prevWall.y > CANVAS_SIZE.height){
-			gameState.score += gameState.walls[0].pointValue;
 			gameState.walls.shift();
 		}
 
@@ -43,7 +42,6 @@ export function updateWalls(gameState: GameState) {
 export function updateBlades( gameState: GameState) {
 	gameState.blades.forEach((blade) => {
 		if (blade.y > CANVAS_SIZE.height) {
-			gameState.score += blade.pointValue;
 			gameState.blades.shift();
 		}
 	});
@@ -62,7 +60,6 @@ export function updateBlades( gameState: GameState) {
 export function updateMainSpikes(gameState: GameState) {
 	gameState.mainWallSpikes.forEach((spike) => {
 		if (spike.y > CANVAS_SIZE.height){
-			gameState.score += spike.pointValue;
 			gameState.mainWallSpikes.shift();
 		}
 	});
@@ -73,10 +70,9 @@ export function updateMainSpikes(gameState: GameState) {
 	}
 }
 
-export function updateDemons(demons: Demon[],gameState:GameState, gameSpeed: number){
+export function updateDemons(demons: Demon[], gameSpeed: number){
 	if(demons.length){
 		if(demons[0].y > CANVAS_SIZE.height){
-			gameState.score += demons[0].pointValue;
 			demons.shift();
 		}
 
@@ -87,10 +83,9 @@ export function updateDemons(demons: Demon[],gameState:GameState, gameSpeed: num
 	}
 }
 
-export function updateSider(spiders: Spider[], gameState:GameState, gameSpeed: number){
+export function updateSider(spiders: Spider[], gameSpeed: number){
 	if(spiders.length){
 		if(spiders[0].y > CANVAS_SIZE.height){
-			gameState.score += spiders[0].pointValue;
 			spiders.shift();
 		}
 

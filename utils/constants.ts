@@ -5,6 +5,7 @@ import Player from "../modules/player.ts";
 import Demon from "../modules/demon.ts";
 import Spider from "../modules/spider.ts";
 import Spike from "../modules/spike.ts";
+import Background from "../modules/background.ts";
 
 const GAME_MOVEMENT = 2;
 const GAME_MOVEMENT_OFFSET = GAME_MOVEMENT + 1;
@@ -19,6 +20,7 @@ const MAIN_WALL= {
 	y:-64,
 	width: 64,
 	height: CANVAS_SIZE.height+ 100,
+	offSet: 5,
 }
 
 const WALL = {
@@ -88,6 +90,7 @@ export type GameState = {
 	mainWallSpikes: Spike[];
 	score:number;
 	userName: string;
+	backgrounds: Background[];
 }
 
 

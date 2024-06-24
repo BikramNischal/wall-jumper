@@ -160,7 +160,7 @@ export function generateSpider() {
 			imgsrc = "./images/spider-brown.png";
 			break;
 	}
-	const x = MAIN_WALL.x + MAIN_WALL.width;
+	const x = MAIN_WALL.x + MAIN_WALL.width-MAIN_WALL.offSet;
 	const spider =  new Spider(x, 0, imgsrc, 49, 80.3, 3);
 	spider.dy = GAME_MOVEMENT_OFFSET;
 	return spider;

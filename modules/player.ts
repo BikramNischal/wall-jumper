@@ -137,6 +137,10 @@ export default class Player {
 		if (this.dy > -PLAYERDY) {
 			this.dy = -PLAYERDY;
 		}
+
+		if ((this.x + this.w) >= CANVAS_SIZE.width) {
+			rubberCollision(this);
+		}
 	}
 
 	isColliding(object: Wall | Obstacle | Enemy) {
@@ -170,13 +174,6 @@ export default class Player {
 
 	// move player downwards with game speed
 	moveInY(gamespeed: number) {
-		if(this.y === 0){
-			debugger;
-			console.log(this.dy);
-		}
 		this.y += gamespeed;
-		if ((this.x + this.w) >= CANVAS_SIZE.width) {
-			rubberCollision(this);
-		}
 	}
 }
