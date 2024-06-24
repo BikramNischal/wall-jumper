@@ -1,15 +1,8 @@
-import {
-	CANVAS_SIZE,
-	PLAYERDX,
-	PLAYERDY,
-} from "../utils/constants";
+import { CANVAS_SIZE, PLAYERDX, PLAYERDY } from "../utils/constants";
 import { ctx } from "./canvas";
 import Obstacle from "./obstacle";
 import Wall from "./wall";
-import {
-	normalCollision,
-	rubberCollision,
-} from "../utils/wallcollision.ts";
+import { normalCollision, rubberCollision } from "../utils/wallcollision.ts";
 
 import Sound from "./sound.ts";
 import Enemy from "./enemy.ts";
@@ -35,9 +28,9 @@ export default class Player {
 	currentFrame: number;
 	totalFrame: number;
 
-	//for sounds  
-	jumpSound : Sound;
-	airJumpSound:Sound;
+	//for sounds
+	jumpSound: Sound;
+	airJumpSound: Sound;
 	fallSound: Sound;
 
 	constructor(posx: number, posy: number, imgsrc: string) {
@@ -70,23 +63,18 @@ export default class Player {
 		this.currentFrame = 0;
 		this.totalFrame = 8;
 
-		// for player sounds 
+		// for player sounds
 		this.jumpSound = new Sound("./sounds/jumpsound.m4a");
 		this.airJumpSound = new Sound("./sounds/airjumpsound.m4a");
-		this.fallSound = new  Sound("./sounds/fallsound.m4a");
+		this.fallSound = new Sound("./sounds/fallsound.m4a");
+
 	}
 
 	draw() {
 		if (this.loaded)
 			ctx.drawImage(this.img, this.x, this.y, this.w, this.h);
-
-		// image outline FOR TESTING ONLY
-		// ctx.beginPath();
-		// ctx.fillStyle = "red";
-		// ctx.strokeStyle = "red";
-		// ctx.rect(this.x, this.y, this.w, this.h);
-		// ctx.stroke();
 	}
+
 
 	drawJumpSprite(gameSpeed: number) {
 		if (this.loaded) {
@@ -149,7 +137,6 @@ export default class Player {
 		if (this.dy > -PLAYERDY) {
 			this.dy = -PLAYERDY;
 		}
-
 	}
 
 	isColliding(object: Wall | Obstacle | Enemy) {
@@ -172,7 +159,7 @@ export default class Player {
 				this.isJumping = true;
 				--this.jumpCount;
 				rubberCollision(this);
-			} else if (wall.type === 3){
+			} else if (wall.type === 3) {
 				wall.sound = new Sound("./sounds/freezingSound.m4a");
 				wall.sound.play();
 			}
@@ -183,7 +170,13 @@ export default class Player {
 
 	// move player downwards with game speed
 	moveInY(gamespeed: number) {
+		if(this.y === 0){
+			debugger;
+			console.log(this.dy);
+		}
 		this.y += gamespeed;
-		if (this.x + this.w > CANVAS_SIZE.width) rubberCollision(this);
+		if ((this.x + this.w) >= CANVAS_SIZE.width) {
+			rubberCollision(this);
+		}
 	}
 }

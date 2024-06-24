@@ -47,7 +47,7 @@ const gameStatus: GameLoop = {
 	pause: false,
 	clickState: false,
 	restart: false,
-	gameMovement: GAME_MOVEMENT
+	gameMovement: GAME_MOVEMENT,
 };
 
 const generateGameState = () => {
@@ -170,6 +170,7 @@ function Game(gameState: GameState) {
 		wall.moveInY(gameStatus.gameMovement);
 		wall.draw();
 
+		// On collisoin with ice wall freeze player for 1 sec
 		if(wall.effect && !wall.effectUsed){
 			wall.effect.draw();
 			gameStatus.clickState = false;
@@ -178,7 +179,7 @@ function Game(gameState: GameState) {
 				wall.effectUsed = true;
 				gameStatus.clickState = true;
 				clearTimeout(effectDuration);
-			}, 2000)
+			}, 1000)
 		}
 
 		if(wall.spike){
@@ -212,9 +213,9 @@ function Game(gameState: GameState) {
 	}
 
 	// update walls, blades and spikes
-	updateBlades(gameState.blades,gameState);
-	updateWalls(gameState.walls,gameState);
-	updateMainSpikes(gameState.mainWallSpikes, gameState);
+	updateBlades(gameState);
+	updateWalls(gameState);
+	updateMainSpikes(gameState);
 
 	if (gameStatus.pause) return;
 

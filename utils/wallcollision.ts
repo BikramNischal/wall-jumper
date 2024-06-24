@@ -19,6 +19,9 @@ export function normalCollision(player: Player, wall: Wall) {
 				player.y = wall.y + wall.h - player.h / 2;
 				if (player.x < wall.x) player.x = wall.x - player.w;
 				else player.x = wall.x + wall.w;
+				// player.isJumping = true;
+				// player.dy = -player.dy;
+
 			} else {
 				// Collision on the left side
 				player.x = wall.x - player.w;

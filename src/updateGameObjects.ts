@@ -1,6 +1,4 @@
-import Wall, { randomWallHeight } from "../modules/wall.ts";
-import Blade from "../modules/blade.ts";
-import Spike from "../modules/spike.ts";
+import { randomWallHeight } from "../modules/wall.ts";
 import Demon from "../modules/demon.ts";
 import Spider from "../modules/spider.ts";
 
@@ -13,65 +11,65 @@ import { WALL, CANVAS_SIZE, GameState} from "../utils/constants.ts";
 import random from "../utils/random.ts";
 
 // update walls list
-export function updateWalls(walls: Wall[], gameState: GameState) {
+export function updateWalls(gameState: GameState) {
 	// condition checks if the gap between top most wall and the starting-y of canvas
 	// is greater than wall gap in y-axis
 	// if true then new wall is created and add to the list
-	if (walls.length) {
-		const prevWall = walls[walls.length - 1];
+	if (gameState.walls.length) {
+		const prevWall = gameState.walls[gameState.walls.length - 1];
 
 		if(prevWall.y > CANVAS_SIZE.height){
-			gameState.score += walls[0].pointValue;
-			walls.shift();
+			gameState.score += gameState.walls[0].pointValue;
+			gameState.walls.shift();
 		}
 
-		if (walls[walls.length - 1].y > WALL.gapY) {
+		if (gameState.walls[gameState.walls.length - 1].y > WALL.gapY) {
 			//this calcuates the y-position of new wall
 			const newWallHeight = randomWallHeight();
 			const newWallY =
-				walls[walls.length - 1].y - WALL.gapY - newWallHeight;
+				gameState.walls[gameState.walls.length - 1].y - WALL.gapY - newWallHeight;
 			const newWall = generateWall(prevWall);
 			newWall.h = newWallHeight;
 			newWall.y = newWallY;
-			walls.push(newWall);
+			gameState.walls.push(newWall);
 		}
 	} else {
-		walls.push(generateWall(null));
+		gameState.walls.push(generateWall(null));
 	}
 }
 
 //remove blades from array as they go out of canvas
 // and generate more blade if the array is empty
-export function updateBlades(blades: Blade[], gameState: GameState) {
-	blades.forEach((blade) => {
+export function updateBlades( gameState: GameState) {
+	gameState.blades.forEach((blade) => {
 		if (blade.y > CANVAS_SIZE.height) {
 			gameState.score += blade.pointValue;
-			blades.shift();
+			gameState.blades.shift();
 		}
 	});
 
-	if (blades.length === 0) {
+	if (gameState.blades.length === 0) {
 		const newBlades = generateBlades(random(3));
 		newBlades.reverse();
 		newBlades.forEach((blade) => {
 			blade.y *= -1;
 		});
-		blades.push(...newBlades);
+		gameState.blades.push(...newBlades);
 	}
 }
 
 // update spikes list of main wall
-export function updateMainSpikes(spikes: Spike[], gameState: GameState) {
-	spikes.forEach((spike) => {
+export function updateMainSpikes(gameState: GameState) {
+	gameState.mainWallSpikes.forEach((spike) => {
 		if (spike.y > CANVAS_SIZE.height){
 			gameState.score += spike.pointValue;
-			spikes.shift();
+			gameState.mainWallSpikes.shift();
 		}
 	});
 
-	if (spikes.length === 0) {
+	if (gameState.mainWallSpikes.length === 0) {
 		const newSpikes = generateMainSpikes();
-		spikes.push(...newSpikes);
+		gameState.mainWallSpikes.push(...newSpikes);
 	}
 }
 

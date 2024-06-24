@@ -7,7 +7,7 @@ import Spider from "../modules/spider.ts";
 import Spike from "../modules/spike.ts";
 
 const GAME_MOVEMENT = 2;
-const GAME_MOVEMENT_OFFSET = GAME_MOVEMENT + 1; 
+const GAME_MOVEMENT_OFFSET = GAME_MOVEMENT + 1;
 
 const CANVAS_SIZE = {
 	width: canvas.width,
@@ -19,7 +19,6 @@ const MAIN_WALL= {
 	y:-64,
 	width: 64,
 	height: CANVAS_SIZE.height+ 100,
-	xOffSet: 5,
 }
 
 const WALL = {
@@ -105,9 +104,9 @@ export {
 	ENEMY_SIZE,
 	SPIKE_SIZE,
 	GAME_MOVEMENT,
+	GAME_MOVEMENT_OFFSET,
 	BLADE_RANGE,
 	INITX,
 	INITY,
 	BALDE_SIZE,
-	GAME_MOVEMENT_OFFSET
 };

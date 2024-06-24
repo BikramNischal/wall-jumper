@@ -12,7 +12,6 @@ import {
 } from "../utils/constants.ts";
 import { calcx, getWallXPos } from "../utils/generatePosition.ts";
 import random, { prob50, randomRange } from "../utils/random.ts";
-// import Enemy from "../modules/enemy.ts";
 import Demon from "../modules/demon.ts";
 import Spike from "../modules/spike.ts";
 import Spider from "../modules/spider.ts";
@@ -124,7 +123,7 @@ export function generateMainSpikes() {
 		const spike = new Spike(MAIN_WALL.width, y, "right");
 		spike.w = 32;
 		spike.h = 32;
-		spike.x = spike.x - MAIN_WALL.xOffSet;
+		spike.x = spike.x;
 		spikes.push(spike);
 	}
 	return spikes;
@@ -161,7 +160,7 @@ export function generateSpider() {
 			imgsrc = "./images/spider-brown.png";
 			break;
 	}
-	const x = MAIN_WALL.x + MAIN_WALL.width - MAIN_WALL.xOffSet * 2;
+	const x = MAIN_WALL.x + MAIN_WALL.width;
 	const spider =  new Spider(x, 0, imgsrc, 49, 80.3, 3);
 	spider.dy = GAME_MOVEMENT_OFFSET;
 	return spider;
