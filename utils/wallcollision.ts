@@ -60,6 +60,6 @@ export function rubberCollision(player:Player){
 	player.xDirection *= -1;
 	player.dx = player.xDirection * PLAYERDX;
 	
-	player.dy += PLAYERDY/2;
+	player.dy = PLAYERDY;
 	player.isJumping = true;
 }

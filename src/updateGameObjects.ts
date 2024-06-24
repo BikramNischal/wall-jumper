@@ -75,22 +75,6 @@ export function updateMainSpikes(spikes: Spike[], gameState: GameState) {
 	}
 }
 
-// //update enemy list
-// export function updateEnemys(enemys: Enemy[], type: string, gameState: GameState, gameSpeed:number) {
-// 	if (enemys.length) {
-// 		if (enemys[0].y > CANVAS_SIZE.height){
-// 			gameState.score += enemys[0].pointValue;
-// 			enemys.shift();
-// 		}
-// 		enemys.forEach((enemy) => {
-// 			enemy.moveInY(gameSpeed);
-// 			if (type === "demon") {
-// 				enemy.moveInX();
-// 			}
-// 		});
-// 	}
-// // }
-
 export function updateDemons(demons: Demon[],gameState:GameState, gameSpeed: number){
 	if(demons.length){
 		if(demons[0].y > CANVAS_SIZE.height){
