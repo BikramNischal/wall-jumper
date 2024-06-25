@@ -24,6 +24,7 @@ export function prob25(){
     return false;
 }
 
+
 // return true or false with 50% probability
 export function prob50(){
     const randomConst = random(100);

@@ -123,9 +123,6 @@ export function generateMainSpikes(score:number) {
 		let y = 0;
 		if (spikes.length) y = spikes[spikes.length - 1].y - spikeGap;
 		const spike = new Spike(MAIN_WALL.width, y, "right");
-		spike.w = 32;
-		spike.h = 32;
-		spike.x = spike.x;
 		spikes.push(spike);
 	}
 	return spikes;

@@ -96,8 +96,7 @@ function Game(gameState: GameState) {
 	if(gameState.score <= 20)
 		gameState.backgrounds[0].draw();
 	else if(gameState.score <= 40)gameState.backgrounds[1].draw();
-	else gameState.backgrounds[2].draw();
-	
+	else gameState.backgrounds[2].draw();	
 
 
 	displayScore(gameState.score);
@@ -107,7 +106,6 @@ function Game(gameState: GameState) {
 
 	//draw main(left most) wall
 	gameState.mainWall.draw();
-
 	// random demon generation according to game speed
 	if (gameState.gameSpeed % 700 === 0) {
 		const makeEnemy = prob25();
@@ -168,6 +166,7 @@ function Game(gameState: GameState) {
 			return;
 		}
 	}
+
 
 	//Player  movement and rendering
 	// move player down with gamespeed

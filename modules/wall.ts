@@ -104,7 +104,7 @@ export default class Wall {
 		if (hasSpike && this.type < 2 ) {
 			const spike = generateRandomSpike();
 			if (spike.face === "left") {
-				spike.x = this.x - spike.w ;
+				spike.x = this.x - spike.w;
 			} else {
 				spike.x = this.x + this.w;
 			}
@@ -138,7 +138,7 @@ function randomWallType(){
 		return 3;
 	}
 
-	const bounceWallProb = prob10()	;
+	const bounceWallProb = prob25()	;
 	if(bounceWallProb){
 		return 2;
 	} else {

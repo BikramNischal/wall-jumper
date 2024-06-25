@@ -39,8 +39,9 @@ const PLAYERDY:number = -6;
 
 //spikes contants
 const SPIKE_SIZE = {
-	width: 24,
-	height: 24,
+	width: 48,
+	height: 48,
+	offset: 15
 }
 
 //blade constants 

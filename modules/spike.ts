@@ -1,10 +1,10 @@
 import { ctx } from "./canvas.ts";
 import Obstacle from "./obstacle.ts";
-import {obstacleFace } from "../utils/constants.ts";
-import { prob50 } from "../utils/random.ts";
+import { obstacleFace } from "../utils/constants.ts";
+import random  from "../utils/random.ts";
 
 export default class Spike extends Obstacle {
-	face: obstacleFace;
+face: obstacleFace;
 	constructor(posx: number, posy: number, face: obstacleFace) {
 		super(posx, posy);
 		this.face = face;
@@ -17,18 +17,22 @@ export default class Spike extends Obstacle {
 		// select spike
 		// true = spike1
 		// false = spike2
-		const spikeType: boolean = prob50();
+		const spikeType: number = random(100);
 		if (this.face === "right") {
-			if (spikeType) {
+			if (spikeType % 3 === 0) {
 				this.img.src = "./images/spike1-right.png";
-			} else {
+			}else if(spikeType % 3 === 1) {
 				this.img.src = "./images/spike2-right.png";
+			} else {
+				this.img.src = "./images/trap-right.png";
 			}
 		} else {
-			if (spikeType) {
+			if (spikeType % 3 === 0) {
 				this.img.src = "./images/spike1-left.png";
-			} else {
+			} else if(spikeType % 3 === 1) {
 				this.img.src = "./images/spike2-left.png";
+			} else {
+				this.img.src = "./images/trap-left.png";
 			}
 		}
 
@@ -45,7 +49,5 @@ export default class Spike extends Obstacle {
 
 	moveInY(gameSpeed:number) {
 		this.y += gameSpeed;
-	}
-
+	}	
 }
-
