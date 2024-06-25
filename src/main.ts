@@ -7,6 +7,7 @@ import {
 	MAIN_WALL,
 	GameLoop,
 	GAME_MOVEMENT,
+	PLAYERDY,
 } from "../utils/constants.ts";
 import {
 	generateWalls,
@@ -50,6 +51,7 @@ userName.onchange = () => {
 	playerName = userName.value;
 };
 
+// game Loop Status 
 const gameStatus: GameLoop = {
 	pause: false,
 	clickState: false,
@@ -57,7 +59,12 @@ const gameStatus: GameLoop = {
 	gameMovement: GAME_MOVEMENT,
 };
 
+
+
+// generate gamestate
+// gamestate includes enemys, traps and obstacles, player, gamespeed
 const generateGameState = () => {
+	
 	return {
 		blades: generateBlades(2),
 		mainWall: new Wall(
@@ -71,7 +78,7 @@ const generateGameState = () => {
 		gameSpeed: 0,
 		demons: generateDemons(),
 		spiders: generateSpiders(),
-		mainWallSpikes: generateMainSpikes(),
+		mainWallSpikes: generateMainSpikes(0),
 		score: 0,
 		userName: "Unknown",
 		backgrounds:[background1, background3, background2],
@@ -81,6 +88,8 @@ const generateGameState = () => {
 let gameState: GameState = generateGameState();
 
 
+
+// main game function
 function Game(gameState: GameState) {
 	ctx.clearRect(0, 0, CANVAS_SIZE.width, CANVAS_SIZE.height);
 
@@ -94,12 +103,13 @@ function Game(gameState: GameState) {
 	displayScore(gameState.score);
 	++gameState.gameSpeed;
 	gameStatus.gameMovement = GAME_MOVEMENT + (gameState.score / 10) * 0.5;
+	gameState.player.jumpHeight = PLAYERDY + (gameState.score/10) * 0.5;
 
 	//draw main(left most) wall
 	gameState.mainWall.draw();
 
 	// random demon generation according to game speed
-	if (gameState.gameSpeed % 500 === 0) {
+	if (gameState.gameSpeed % 700 === 0) {
 		const makeEnemy = prob25();
 		if (makeEnemy) gameState.demons.push(generateDemon());
 	}
@@ -233,7 +243,7 @@ function Game(gameState: GameState) {
 	updateBlades(gameState);
 	updateWalls(gameState);
 	updateMainSpikes(gameState);
-
+	
 	if(gameState.gameSpeed % 100 === 0) ++gameState.score;
 
 	if (gameStatus.pause) return;

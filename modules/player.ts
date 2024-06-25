@@ -19,6 +19,7 @@ export default class Player {
 	horizontalDelay: number;
 	gravity: number;
 	isJumping: boolean;
+	jumpHeight: number;
 	jumpCount: number;
 	xDirection: number;
 
@@ -43,8 +44,9 @@ export default class Player {
 		this.xDirection = 1;
 		this.horizontalDelay = 0.05;
 		this.gravity = 0.1;
+		this.jumpHeight = PLAYERDY;
 		this.dx = PLAYERDX;
-		this.dy = PLAYERDY;
+		this.dy = this.jumpHeight;
 		this.isJumping = false;
 		this.jumpCount = 2;
 
@@ -98,7 +100,7 @@ export default class Player {
 	resetJump() {
 		if (this.jumpCount === 1) this.xDirection *= -1;
 		this.dx = PLAYERDX * this.xDirection;
-		this.dy = PLAYERDY;
+		this.dy = this.jumpHeight;
 	}
 
 	// change player images according to jump status
@@ -129,17 +131,19 @@ export default class Player {
 			if (this.y > 0) {
 				this.y += this.dy;
 			} else {
-				this.y = 0;
+				this.dy -= this.dy;
 			}
 		}
 
 		// Limit falling speed
 		if (this.dy > -PLAYERDY) {
-			this.dy = -PLAYERDY;
+			this.dy = -this.jumpHeight;
 		}
 
-		if ((this.x + this.w) >= CANVAS_SIZE.width) {
-			rubberCollision(this);
+		if ((this.x + this.w) >= CANVAS_SIZE.width && this.dx > 0) {
+			this.jumpCount = 1;
+			this.dx = -this.dx;
+			this.dy =  this.jumpHeight/2;
 		}
 	}
 
@@ -160,7 +164,6 @@ export default class Player {
 			if (wall.type === 2) {
 				wall.sound = new Sound("./sounds/rubberbounce1.mp3");
 				wall.sound.play();
-				this.isJumping = true;
 				--this.jumpCount;
 				rubberCollision(this);
 			} else if (wall.type === 3) {

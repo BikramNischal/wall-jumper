@@ -1,13 +1,12 @@
 import { MovingObstacle } from "./obstacle";
-import { BALDE_SIZE, Direction} from "../utils/constants";
+import { BALDE_SIZE, Direction } from "../utils/constants";
 import { ctx } from "./canvas";
 
 export default class Blade extends MovingObstacle {
 	spriteWidth: number;
-    spriteHeight: number;
-    currentFrame: number;
-    totalFrame:number;
-
+	spriteHeight: number;
+	currentFrame: number;
+	totalFrame: number;
 
 	constructor(
 		posx: number,
@@ -18,15 +17,14 @@ export default class Blade extends MovingObstacle {
 		end: number
 	) {
 		super(posx, posy, direction, imgsrc, start, end);
-        this.spriteHeight= 166;
-        this.spriteWidth= 164.5;
-        this.currentFrame = 0;
-        this.totalFrame = 5;
-        this.h = BALDE_SIZE.height;
-        this.w = BALDE_SIZE.width;
-		this.dx= 1;
-		this.pointValue= 2;
-
+		this.spriteHeight = 32;
+		this.spriteWidth = 32;
+		this.currentFrame = 0;
+		this.totalFrame = 8;
+		this.h = BALDE_SIZE.height;
+		this.w = BALDE_SIZE.width;
+		this.dx = 1;
+		this.pointValue = 2;
 	}
 
 	draw() {
@@ -43,7 +41,6 @@ export default class Blade extends MovingObstacle {
 				this.h
 			);
 
-        this.currentFrame = (this.currentFrame+1) % this.totalFrame;
+		this.currentFrame = (this.currentFrame + 1) % this.totalFrame;
 	}
-
 }

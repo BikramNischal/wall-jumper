@@ -138,7 +138,7 @@ function randomWallType(){
 		return 3;
 	}
 
-	const bounceWallProb = prob25()	;
+	const bounceWallProb = prob10()	;
 	if(bounceWallProb){
 		return 2;
 	} else {

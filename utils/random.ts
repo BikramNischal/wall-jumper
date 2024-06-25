@@ -13,7 +13,7 @@ export function randomRange(min:number, max:number){
 //return true or false according to 10% probability
 export function prob10(){
     const randomConst = random(100);
-    if(randomConst < 20 && randomConst%2 === 0)  return true;
+    if(randomConst < 10 && randomConst%2 === 0)  return true;
     return false;
 }
 

@@ -65,7 +65,7 @@ export function updateMainSpikes(gameState: GameState) {
 	});
 
 	if (gameState.mainWallSpikes.length === 0) {
-		const newSpikes = generateMainSpikes();
+		const newSpikes = generateMainSpikes(gameState.score);
 		gameState.mainWallSpikes.push(...newSpikes);
 	}
 }

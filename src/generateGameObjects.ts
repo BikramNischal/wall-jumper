@@ -29,7 +29,7 @@ export function generateWall(prevWall: Wall | null) {
 		? prevWall.y - wallHeight - WALL.gapY
 		: CANVAS_SIZE.height - wallHeight - WALL.gapY;
 
-	const wallType = randomWallType();
+	let wallType = randomWallType();
 	if (wallType === 1) {
 		wall = new Wall(x, y, 1, "./images/normal-wall.png");
 	}
@@ -61,7 +61,7 @@ export function generateBlade() {
 	//get start and end point of the balde movement range
 	const startpos = calcx();
 	const endpos =
-		startpos + BLADE_RANGE - 2 * BALDE_SIZE.width >
+		startpos + BLADE_RANGE -BALDE_SIZE.width >
 		CANVAS_SIZE.width - BALDE_SIZE.width
 			? CANVAS_SIZE.width - BALDE_SIZE.width
 			: startpos + BLADE_RANGE;
@@ -72,7 +72,7 @@ export function generateBlade() {
 		x,
 		0,
 		"horizontal",
-		"./images/saw-blade.png",
+		"./images/Suriken.png",
 		startpos,
 		endpos
 	);
@@ -80,12 +80,12 @@ export function generateBlade() {
 }
 
 // takes number of obstacle to generate i.e num
-export function generateBlades(num: number) {
+export function generateBlades(maxBladeCount:number) {
 	//Gap between blades
 	const bladeGap = CANVAS_SIZE.height/2;
 
 	const blades: Blade[] = [];
-	for (let i = 0; i < num; ++i) {
+	for (let i = 0; i < maxBladeCount; ++i) {
 		const blade: Blade = generateBlade();
 		const y = CANVAS_SIZE.height - blade.h - bladeGap * (i + 1);
 		blade.y = y;
@@ -113,11 +113,13 @@ export function generateRandomSpike() {
 }
 
 //generate spikes for main wall on the left
-export function generateMainSpikes() {
+export function generateMainSpikes(score:number) {
 	const spikeGap = SPIKE_SIZE.height * 10;
-	const spikeNum = random(3);
+	const spikeCount = Math.floor(score%5);
+	const maxSpikeCount = spikeCount < 3 ? spikeCount : 3; 
+
 	const spikes: Spike[] = [];
-	for (let i = 0; i < spikeNum; ++i) {
+	for (let i = 0; i < random(maxSpikeCount); ++i) {
 		let y = 0;
 		if (spikes.length) y = spikes[spikes.length - 1].y - spikeGap;
 		const spike = new Spike(MAIN_WALL.width, y, "right");

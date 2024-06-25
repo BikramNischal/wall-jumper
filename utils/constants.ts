@@ -34,10 +34,6 @@ const WALL = {
 }
 
 //player movement speed
-const PLAYER_MOVEMENT = {
-	dx: 8,
-	dy: -6,
-}
 const PLAYERDX:number = 8;
 const PLAYERDY:number = -6;
 
@@ -101,7 +97,6 @@ export {
 	CANVAS_SIZE,
 	MAIN_WALL,
 	WALL,
-	PLAYER_MOVEMENT,
 	PLAYERDX,
 	PLAYERDY,
 	ENEMY_SIZE,

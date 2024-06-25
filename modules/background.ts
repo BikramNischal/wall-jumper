@@ -1,6 +1,9 @@
 import { ctx } from "./canvas.ts";
 import { GAME_MOVEMENT } from "../utils/constants.ts";
 
+
+
+// create background images using different layer of images
 export default class Background {
 	x: number;
 	y: number;
